@@ -112,10 +112,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnProdutos" alignment="3" min="-2" pref="90" max="-2" attributes="0"/>
-                          <Component id="btnClientes" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="btnClientes" alignment="0" min="-2" pref="90" max="-2" attributes="0"/>
+                      <Component id="btnProdutos" min="-2" pref="90" max="-2" attributes="0"/>
                       <Component id="btnNotasFiscais" min="-2" pref="90" max="-2" attributes="0"/>
                       <Component id="btnFornecedores" min="-2" pref="90" max="-2" attributes="0"/>
                   </Group>
