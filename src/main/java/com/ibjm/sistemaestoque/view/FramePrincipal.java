@@ -19,7 +19,11 @@ import com.ibjm.sistemaestoque.model.vo.Produto;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,6 +38,11 @@ public class FramePrincipal extends javax.swing.JFrame {
 	 * Creates new form FramePrincipal
 	 */
 	public FramePrincipal() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+			JOptionPane.showMessageDialog(this, "Problema ao carregar tema do sistema: " + e);
+		}
 		initComponents();
 		setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 		update();

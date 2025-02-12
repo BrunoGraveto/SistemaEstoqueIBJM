@@ -23,7 +23,6 @@ com\ibjm\sistemaestoque\model\vo\Produto.class
 com\ibjm\sistemaestoque\controller\NotaFiscalController.class
 com\ibjm\sistemaestoque\view\FrameCliente$2.class
 com\ibjm\sistemaestoque\view\FrameProduto$1.class
-com\ibjm\sistemaestoque\view\PanelProcurar$3.class
 com\ibjm\sistemaestoque\view\FrameCliente.class
 com\ibjm\sistemaestoque\model\vo\Fornecedor.class
 com\ibjm\sistemaestoque\view\FrameProduto.class
@@ -34,7 +33,6 @@ com\ibjm\sistemaestoque\view\FramePrincipal$3.class
 com\ibjm\sistemaestoque\model\dao\PagamentoDAO.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal.class
 com\ibjm\sistemaestoque\model\dao\ClienteDAO.class
-com\ibjm\sistemaestoque\view\PanelProcurar$4.class
 com\ibjm\sistemaestoque\view\FrameFornecedor$2.class
 com\ibjm\sistemaestoque\view\FrameConfirmar.class
 com\ibjm\sistemaestoque\view\FramePrincipal$6.class
