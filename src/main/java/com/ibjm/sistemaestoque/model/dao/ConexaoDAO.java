@@ -18,7 +18,7 @@ public class ConexaoDAO {
 	// Config
 	private static final String URL = "jdbc:mysql://localhost:3306/sistema_estoque";
 	private static final String USUARIO = "root";
-	private static final String SENHA = "iPakif_#2130";
+	private static final String SENHA = "123456";
 	
 	public static Connection conectar() {
 		try {
