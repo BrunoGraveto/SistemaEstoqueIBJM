@@ -29,7 +29,7 @@ public class ClienteRN {
             throw new Exception("RG não pode ser nulo ou vazio!");
         }
 		
-        if (cliente.getTelefone() == null || !cliente.getTelefone().matches("")) { // R E V E R
+        if (cliente.getTelefone() == null) { // R E V E R
             throw new Exception("Telefone inválido! Deve conter 10 ou 11 dígitos.");
         }
 

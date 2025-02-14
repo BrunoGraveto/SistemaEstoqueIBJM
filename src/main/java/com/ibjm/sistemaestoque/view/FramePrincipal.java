@@ -16,6 +16,7 @@ import com.ibjm.sistemaestoque.model.vo.Cliente;
 import com.ibjm.sistemaestoque.model.vo.Fornecedor;
 import com.ibjm.sistemaestoque.model.vo.NotaFiscal;
 import com.ibjm.sistemaestoque.model.vo.Produto;
+import java.awt.Font;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class FramePrincipal extends javax.swing.JFrame {
 		initComponents();
 		setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 		update();
+                
 	}
 
 	/**
@@ -62,6 +64,10 @@ public class FramePrincipal extends javax.swing.JFrame {
         btnClientes = new javax.swing.JToggleButton();
         btnFornecedores = new javax.swing.JToggleButton();
         btnNotasFiscais = new javax.swing.JToggleButton();
+        texFornecedores = new javax.swing.JLabel();
+        texNotaFiscal = new javax.swing.JLabel();
+        texProdutos = new javax.swing.JLabel();
+        texCliente = new javax.swing.JLabel();
         panelOperacoes = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
@@ -84,63 +90,99 @@ public class FramePrincipal extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabelas"));
-
-        btnProdutos.setText("Produtos");
+        btnProdutos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img-produto.png"))); // NOI18N
         btnProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProdutosActionPerformed(evt);
             }
         });
 
-        btnClientes.setText("Clientes");
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img-cliente.png"))); // NOI18N
         btnClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClientesActionPerformed(evt);
             }
         });
 
-        btnFornecedores.setText("Fornecedores");
+        btnFornecedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img-fornecedor.png"))); // NOI18N
         btnFornecedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFornecedoresActionPerformed(evt);
             }
         });
 
-        btnNotasFiscais.setText("Notas Fiscais");
+        btnNotasFiscais.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img-fiscal.png"))); // NOI18N
         btnNotasFiscais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNotasFiscaisActionPerformed(evt);
             }
         });
 
+        texFornecedores.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texFornecedores.setText("Fornecedores");
+
+        texNotaFiscal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texNotaFiscal.setText("Notas Fiscais");
+
+        texProdutos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texProdutos.setText("Produtos");
+
+        texCliente.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texCliente.setText("Clientes");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnProdutos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnClientes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnFornecedores)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnNotasFiscais)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(texProdutos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(56, 56, 56)
+                        .addComponent(texCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(20, 20, 20)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(texFornecedores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(texNotaFiscal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnNotasFiscais, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(272, 272, 272))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNotasFiscais, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNotasFiscais, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(texProdutos)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(texCliente)
+                                .addComponent(texNotaFiscal))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(texFornecedores)))
+                .addGap(23, 23, 23))
         );
 
-        panelOperacoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Operações"));
         setVisible(false);
 
         jLabel1.setText("Buscar");
@@ -237,7 +279,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(brnRR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -256,7 +298,7 @@ public class FramePrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelOperacoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -264,7 +306,7 @@ public class FramePrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelOperacoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -275,18 +317,50 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
 		selecionar("Produtos");
+                btnProdutos.setEnabled(false);
+                btnClientes.setEnabled(true);
+                btnNotasFiscais.setEnabled(true);
+                btnFornecedores.setEnabled(true);
+                texProdutos.setFont(new Font("Arial", Font.BOLD, 14));
+                texCliente.setFont(new Font("Arial", Font.PLAIN, 14));
+                texFornecedores.setFont(new Font("Arial", Font.PLAIN, 14));
+                texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 14));
     }//GEN-LAST:event_btnProdutosActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
 		selecionar("Clientes");
+                btnProdutos.setEnabled(true);
+                btnClientes.setEnabled(false);
+                btnNotasFiscais.setEnabled(true);
+                btnFornecedores.setEnabled(true);
+                texProdutos.setFont(new Font("Arial", Font.PLAIN, 14));
+                texCliente.setFont(new Font("Arial", Font.BOLD, 14));
+                texFornecedores.setFont(new Font("Arial", Font.PLAIN, 14));
+                texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 14));
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedoresActionPerformed
 		selecionar("Fornecedores");
+                btnProdutos.setEnabled(true);
+                btnClientes.setEnabled(true);
+                btnNotasFiscais.setEnabled(true);
+                btnFornecedores.setEnabled(false);
+                texProdutos.setFont(new Font("Arial", Font.PLAIN, 14));
+                texCliente.setFont(new Font("Arial", Font.PLAIN, 14));
+                texFornecedores.setFont(new Font("Arial", Font.BOLD, 14));
+                texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 14));
     }//GEN-LAST:event_btnFornecedoresActionPerformed
 
     private void btnNotasFiscaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotasFiscaisActionPerformed
 		selecionar("NotasFiscais");
+                btnProdutos.setEnabled(true);
+                btnClientes.setEnabled(true);
+                btnNotasFiscais.setEnabled(false);
+                btnFornecedores.setEnabled(true);
+                texProdutos.setFont(new Font("Arial", Font.PLAIN, 14));
+                texCliente.setFont(new Font("Arial", Font.PLAIN, 14));
+                texFornecedores.setFont(new Font("Arial", Font.PLAIN, 14));
+                texNotaFiscal.setFont(new Font("Arial", Font.BOLD, 14));
     }//GEN-LAST:event_btnNotasFiscaisActionPerformed
 
 	/*
@@ -380,11 +454,6 @@ public class FramePrincipal extends javax.swing.JFrame {
 	*/
 	public void selecionar(String ambienteSelecionado) {
 		try {
-			// Deixa todos deselecionados
-			btnProdutos.setSelected(false);
-			btnClientes.setSelected(false);
-			btnFornecedores.setSelected(false);
-			btnNotasFiscais.setSelected(false);
 
 			String[] cabecalho = null;
 			Object[][] arrayDados = null;
@@ -392,25 +461,26 @@ public class FramePrincipal extends javax.swing.JFrame {
 			// Deixa o selecionado ativo
 			switch (ambienteSelecionado) {
 			case "Produtos" -> {
+<<<<<<< HEAD
 				btnProdutos.setSelected(true);
 				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "Quantidade", "Data Cadastro"};
+=======
+				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "qtd", "Data Cadastro"};
+>>>>>>> 16bc6e7fc7fd41c8b930ab1e109d539c2751a8a4
 				ArrayList<Produto> arrayProdutos = ProdutoDAO.listarProdutos(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
 				arrayDados = ProdutoController.obterDados(arrayProdutos);
 				}
 			case "Clientes" -> {
-				btnClientes.setSelected(true);
 				cabecalho = new String[] {"Codigo", "Status", "Nome", "CPF", "RG", "Endereço", "Telefone", "Email", "Data Cadastro"};
 				ArrayList<Cliente> arrayClientes = ClienteDAO.listarClientes(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
 				arrayDados = ClienteController.obterDados(arrayClientes);
 				}
 			case "Fornecedores" -> {
-				btnFornecedores.setSelected(true);
 				cabecalho = new String[] {"Codigo", "Status", "Nome", "CNPJ", "Inscrição Estadual", "CNAE", "Endereço", "Telefone", "Email", "Data Cadastro"};
 				ArrayList<Fornecedor> arrayFornecedores = FornecedorDAO.listarFornecedores(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
 				arrayDados = FornecedorController.obterDados(arrayFornecedores);
 				}
 			case "NotasFiscais" -> {
-				btnNotasFiscais.setSelected(true);
 	//			cabecalho = new String[] {"Codigo", "Status", "Nome", "CNPJ", "Endereço", "Email", "Telefone", "Data Cadastro"};
 	//			ArrayList<NotaFiscal> arrayNotasFiscais = NotaFiscalDAO.listarFornecedores();
 	//			arrayDados = NotaFiscalController.obterDados(arrayNotasFiscais);
@@ -485,6 +555,10 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelOperacoes;
     private javax.swing.JTable table;
+    private javax.swing.JLabel texCliente;
+    private javax.swing.JLabel texFornecedores;
+    private javax.swing.JLabel texNotaFiscal;
+    private javax.swing.JLabel texProdutos;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

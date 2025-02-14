@@ -26,7 +26,7 @@ public class ClienteController {
 		int coluna = 0;
 		
 		// Array que salvara os dados
-		Object[][] arrayDados = new Object[arrayClientes.size()][10];
+		Object[][] arrayDados = new Object[arrayClientes.size()][9];
 		
 		// Passa pelo array list os colocando no array de objetos
 		for (Cliente cliente : arrayClientes) {
@@ -36,7 +36,6 @@ public class ClienteController {
 			arrayDados[linha][coluna++] = cliente.getCpf();
 			arrayDados[linha][coluna++] = cliente.getRg();
 			arrayDados[linha][coluna++] = cliente.getEndereco().getRua() + ", " + cliente.getEndereco().getNum() + " - " + cliente.getEndereco().getBairro() + ", " + cliente.getEndereco().getCidade() + " - " + cliente.getEndereco().getEstado();
-			arrayDados[linha][coluna++] = cliente.getEndereco().getCep();
 			arrayDados[linha][coluna++] = cliente.getTelefone();
 			arrayDados[linha][coluna++] = cliente.getEmail();
 			arrayDados[linha++][coluna++] = cliente.getDataCadastroString();

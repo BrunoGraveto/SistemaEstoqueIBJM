@@ -356,7 +356,7 @@ public class FrameCliente extends javax.swing.JFrame {
 			String email = txtEmail.getText();
 			String telefone = txtTelefone.getText();
 			LocalDate dataCadastro = LocalDate.parse(txtDataCadastro.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-			Cliente cliente = new Cliente(id, true, nome, cpf, rg, endereco, email, telefone, dataCadastro);
+			Cliente cliente = new Cliente(id, true, nome, cpf, rg, endereco, telefone, email, dataCadastro);
 			// Adicionar ou editar
 			if (modo.equals("Adicionar")) {
 				ClienteController.addCliente(cliente);
@@ -399,7 +399,7 @@ public class FrameCliente extends javax.swing.JFrame {
 				txtEndBairro.setText(cliente.getEndereco().getBairro());
 				txtEndCidade.setText(cliente.getEndereco().getCidade());
 				txtTelefone.setText(cliente.getTelefone());
-				txtEmail.setText(cliente.getEmail());
+                                txtEmail.setText(cliente.getEmail());
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(this, e);

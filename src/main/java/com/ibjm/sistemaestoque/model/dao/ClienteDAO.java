@@ -40,8 +40,8 @@ public class ClienteDAO {
 			pstm.setString(2, cliente.getNome());
 			pstm.setString(3, cliente.getCpf());
 			pstm.setString(4, cliente.getRg());
-			pstm.setString(5, cliente.getEmail());
-			pstm.setString(6, cliente.getTelefone());
+			pstm.setString(5, cliente.getTelefone());
+			pstm.setString(6, cliente.getEmail());
 			pstm.setDate(7, Date.valueOf(cliente.getDataCadastro()));
 			pstm.executeUpdate();
 		} catch (SQLException e) {
@@ -102,7 +102,7 @@ public class ClienteDAO {
 				Date dateCadastro = rs.getDate("data_cadastro_cliente");
 				LocalDate dataCadastro = dateCadastro.toLocalDate();
 				Endereco endereco = EnderecoDAO.encontrarEndereco(encontrarIdEndereco(id));
-				Cliente cliente = new Cliente(id, status, nome, cpf, rg, endereco, email, telefone, dataCadastro);
+				Cliente cliente = new Cliente(id, status, nome, cpf, rg, endereco, telefone, email, dataCadastro);
 				// Caso o cliente esteja inativo, não o coloca no array
 				if (pesquisar(categoria, procurar).equals("") && !status) {
 					continue;
@@ -173,7 +173,7 @@ public class ClienteDAO {
 					Date dateCadastro = rs.getDate("data_cadastro_cliente");
 					LocalDate dataCadastro = dateCadastro.toLocalDate();
 					Endereco endereco = EnderecoDAO.encontrarEndereco(encontrarIdEndereco(id));
-					cliente = new Cliente(id, status, nome, cpf, rg, endereco, email, telefone, dataCadastro);
+					cliente = new Cliente(id, status, nome, cpf, rg, endereco, telefone, email, dataCadastro);
 				}
 			}
 		} catch (SQLException e) {

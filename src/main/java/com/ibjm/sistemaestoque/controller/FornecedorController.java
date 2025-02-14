@@ -28,7 +28,7 @@ public class FornecedorController {
 		int coluna = 0;
 		
 		// Array que salvara os dados
-		Object[][] arrayDados = new Object[arrayFornecedores.size()][11];
+		Object[][] arrayDados = new Object[arrayFornecedores.size()][10];
 		
 		// Passa pelo array list os colocando no array de objetos
 		for (Fornecedor fornecedor : arrayFornecedores) {
@@ -39,7 +39,6 @@ public class FornecedorController {
 			arrayDados[linha][coluna++] = fornecedor.getInscricaoEstadual();
 			arrayDados[linha][coluna++] = fornecedor.getCnae();
 			arrayDados[linha][coluna++] = fornecedor.getEndereco().getRua() + ", " + fornecedor.getEndereco().getNum() + " - " + fornecedor.getEndereco().getBairro() + ", " + fornecedor.getEndereco().getCidade() + " - " + fornecedor.getEndereco().getEstado();
-			arrayDados[linha][coluna++] = fornecedor.getEndereco().getCep();
 			arrayDados[linha][coluna++] = fornecedor.getTelefone();
 			arrayDados[linha][coluna++] = fornecedor.getEmail();
 			arrayDados[linha++][coluna++] = fornecedor.getDataCadastroString();
