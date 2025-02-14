@@ -7,6 +7,7 @@ package com.ibjm.sistemaestoque.controller;
 import com.ibjm.sistemaestoque.model.dao.ProdutoDAO;
 import com.ibjm.sistemaestoque.model.rn.ProdutoRN;
 import com.ibjm.sistemaestoque.model.vo.Produto;
+import com.ibjm.sistemaestoque.model.vo.Fornecedor;
 import java.util.ArrayList;
 
 /**
@@ -56,14 +57,20 @@ public class ProdutoController {
 	public static void addProduto(Produto produto) throws Exception {
 		ProdutoRN.validarProduto(produto);
 		ProdutoDAO.addProduto(produto);
+		ProdutoDAO.addAssociacaoFornecedor(produto);
 	}
 	
 	/*
 		Verifica e altera um produto existente no BD.
 	*/
 	public static void editarProduto(Produto produto) throws Exception {
+		boolean addAssociacao = ProdutoDAO.getFornecedoresProduto(produto.getID()).size() != produto.getFornecedores().size();
 		ProdutoRN.validarProduto(produto);
 		ProdutoDAO.editarProduto(produto);
+		System.out.println(addAssociacao);
+		if (addAssociacao) {
+			ProdutoDAO.addAssociacaoFornecedor(produto);
+		}
 	}
 	
 	/*

@@ -5,6 +5,7 @@
 package com.ibjm.sistemaestoque.view;
 
 import com.ibjm.sistemaestoque.controller.ProdutoController;
+import com.ibjm.sistemaestoque.model.dao.FornecedorDAO;
 import com.ibjm.sistemaestoque.model.dao.ProdutoDAO;
 import com.ibjm.sistemaestoque.model.vo.Fornecedor;
 import com.ibjm.sistemaestoque.model.vo.Produto;
@@ -12,8 +13,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,6 +29,7 @@ public class FrameProduto extends javax.swing.JFrame {
 	private FramePrincipal fp;
 	private String modo;
 	private int codSelecionado;
+	ArrayList<Fornecedor> fornecedores;
 	
 	/**
 	 * Creates new form FrameProduto
@@ -37,15 +41,10 @@ public class FrameProduto extends javax.swing.JFrame {
 		this.fp = fp;
 		this.modo = modo;
 		this.codSelecionado = codSelecionado;
+		fornecedores = new ArrayList<>();
 		initComponents();
 		preencher();
 		setLocationRelativeTo(fp);
-		txtCod.setFocusable(false);
-		txtDataCadastro.setFocusable(false);
-		txtMarca.setFocusable(true);
-		if (modo.equals("Editar")) {
-			updateFornecedores(Integer.parseInt(txtCod.getText()));
-		}
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class FrameProduto extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         lbDataFabricacao = new javax.swing.JLabel();
         lbDataValidade = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxFornecedores = new javax.swing.JComboBox<>();
         lbFornecedores = new javax.swing.JLabel();
         txtDataFabricacao = new javax.swing.JFormattedTextField(maskData);
         txtDataValidade = new javax.swing.JFormattedTextField(maskData);
@@ -310,6 +309,13 @@ public class FrameProduto extends javax.swing.JFrame {
 
         lbDataValidade.setText("Data Val.");
 
+        comboBoxFornecedores.setToolTipText("Para remover clique");
+        comboBoxFornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboBoxFornecedoresMouseClicked(evt);
+            }
+        });
+
         lbFornecedores.setText("Fornecedores");
 
         btnAddFornecedor.setText("Add");
@@ -335,7 +341,7 @@ public class FrameProduto extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(comboBoxFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddFornecedor))
                     .addComponent(lbFornecedores))
@@ -350,7 +356,7 @@ public class FrameProduto extends javax.swing.JFrame {
                     .addComponent(lbFornecedores))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDataFabricacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDataValidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddFornecedor))
@@ -398,7 +404,6 @@ public class FrameProduto extends javax.swing.JFrame {
 			// Dados
 			int id = Integer.parseInt(txtCod.getText());
 			boolean status = true;
-			ArrayList<Fornecedor> fornecedores = null;
 			String marca = txtMarca.getText();
 			String descricao = txtDescricao.getText();
 			double valorCompra = Double.parseDouble(txtValorCompra.getText());
@@ -435,31 +440,48 @@ public class FrameProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAddFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFornecedorActionPerformed
-        JFrame janelaFornecedores = new JFrame();
-		janelaFornecedores.setTitle("Procurar Fornecedor");
-		janelaFornecedores.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		FramePrincipal fp2 = fp;
-		fp2.selecionar("Fornecedores");
-		PanelProcurar panelProcurar = new PanelProcurar(fp2);
-		janelaFornecedores.add(panelProcurar);
-		janelaFornecedores.pack();
-		janelaFornecedores.setLocationRelativeTo(fp2);
-		janelaFornecedores.setVisible(true);
+		try {
+			int codFornecedorSelecionado = DialogProcurar.getIDSelecionado(this, "Fornecedores");
+			Fornecedor fornecedorSelecionado = FornecedorDAO.encontrarFornecedor(codFornecedorSelecionado);
+			
+			// Verifica se o fornecedor ja esta presente no array
+			boolean encontrado = false;
+			for (Fornecedor fornecedor : fornecedores) {
+				if (fornecedor.getID() == codFornecedorSelecionado) {
+					encontrado = true;
+					JOptionPane.showMessageDialog(this, "Esse fornecedor já foi adicionado!");
+					break;
+				}
+			}
+			
+			// Se não foi adiciona
+			if (!encontrado) {
+				fornecedores.add(fornecedorSelecionado);
+				updateComboBoxFornecedores();
+			}
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, "Problema ao adicionar Fornecedor ao Produto!");
+		}
     }//GEN-LAST:event_btnAddFornecedorActionPerformed
 
-	private void updateFornecedores(int id) {
-		try {
-			// Converte um ArrayList em um Array normal com os nomes dos fornecedores
-			ArrayList<Fornecedor> arrayListFornecedores = ProdutoDAO.encontrarFornecedoresProduto(id);
-			String[] fornecedores = new String[arrayListFornecedores.size()];
-			int index = 0;
-			for (Fornecedor fornecedor : arrayListFornecedores) {
-				fornecedores[index++] = fornecedor.getNome(); 
+    private void comboBoxFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboBoxFornecedoresMouseClicked
+        if (fornecedores.size() > 0) {
+			if (DialogConfirmar.confirmar(this, "Tem certeza que deseja remover esse Fornecedor?")) {
+				int indexFornecedorRemover = comboBoxFornecedores.getSelectedIndex();
+				fornecedores.remove(indexFornecedorRemover);
+				updateComboBoxFornecedores();
 			}
-			comboBoxCategoria = new JComboBox<>(fornecedores);
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(this, "Problema ao atualizar fornecedores: " + e);
+		} else {
+			JOptionPane.showMessageDialog(this, "Não há nenhum fornecedor para remover!");
 		}
+    }//GEN-LAST:event_comboBoxFornecedoresMouseClicked
+	
+	private void updateComboBoxFornecedores() {
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+		for (Fornecedor fornecedor : fornecedores) {
+			model.addElement(fornecedor.getNome());
+		}
+		comboBoxFornecedores.setModel(model);
 	}
 	
 	private void preencher() {
@@ -488,6 +510,12 @@ public class FrameProduto extends javax.swing.JFrame {
 				txtDataFabricacao.setText(produto.getDataFabricacaoString());
 				txtDataValidade.setText(produto.getDataValidadeString());
 				txtDataCadastro.setText(produto.getDataCadastroString());
+				fornecedores = produto.getFornecedores();
+				updateComboBoxFornecedores();
+				// Focusable
+				txtCod.setFocusable(false);
+				txtDataCadastro.setFocusable(false);
+				txtMarca.setFocusable(true);
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(this, e);
@@ -499,8 +527,8 @@ public class FrameProduto extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> comboBoxCategoria;
+    private javax.swing.JComboBox<String> comboBoxFornecedores;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

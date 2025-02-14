@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FramePrincipal extends javax.swing.JFrame {
 
-	String modo = "";
+	String ambiente = "";
 	
 	/**
 	 * Creates new form FramePrincipal
@@ -69,7 +69,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnAdicionar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnRemover = new javax.swing.JButton();
+        brnRR = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -163,7 +163,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         btnAdicionar.setText("Adicionar");
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarActionPerformed(evt);
+                btnAdicionarEditarActionPerformed("Adicionar");
             }
         });
 
@@ -171,14 +171,14 @@ public class FramePrincipal extends javax.swing.JFrame {
         btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
+                btnAdicionarEditarActionPerformed("Editar");
             }
         });
 
-        btnRemover.setText("Remover");
-        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+        brnRR.setText("Remover");
+        brnRR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoverActionPerformed(evt);
+                brnRRActionPerformed(evt);
             }
         });
 
@@ -214,7 +214,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(brnRR, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
@@ -235,7 +235,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                 .addGroup(panelOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRemover))
+                    .addComponent(brnRR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                 .addContainerGap())
@@ -302,21 +302,31 @@ public class FramePrincipal extends javax.swing.JFrame {
         update();
     }//GEN-LAST:event_tableMouseClicked
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        switch (modo) {
+	private void btnAdicionarEditarActionPerformed(String ambienteBtn) {
+		String acao = "";
+		int codSelecionado = 0;
+		if (ambienteBtn.equals("Adicionar")) {
+			acao = "Adicionar";
+			codSelecionado = -1;
+		} else if (ambienteBtn.equals("Editar")) {
+			acao = "Editar";
+			codSelecionado = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+		}
+		
+		switch (ambiente) {
 		case "Produtos" -> {
 			// Frame Produto
-			FrameProduto fp = new FrameProduto(this, "Adicionar", -1);
-			fp.setVisible(true);
+			FrameProduto fpdt = new FrameProduto(this, acao, codSelecionado);
+			fpdt.setVisible(true);
 			}
 		case "Clientes" -> {
 			// Frame Cliente
-			FrameCliente fc = new FrameCliente(this, "Adicionar", -1);
+			FrameCliente fc = new FrameCliente(this, acao, codSelecionado);
 			fc.setVisible(true);
 			}
 		case "Fornecedores" -> {
 			// Frame Fornecedor
-			FrameFornecedor ff = new FrameFornecedor(this, "Adicionar", -1);
+			FrameFornecedor ff = new FrameFornecedor(this, acao, codSelecionado);
 			ff.setVisible(true);
 			}
 		case "NotasFiscais" -> {
@@ -325,47 +335,19 @@ public class FramePrincipal extends javax.swing.JFrame {
 			fnf.setVisible(true);
 			}
 		}
-    }//GEN-LAST:event_btnAdicionarActionPerformed
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        switch (modo) {
-		case "Produtos" -> {
-			// Frame Produto
-			FrameProduto fp = new FrameProduto(this, "Editar", Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()));
-			fp.setVisible(true);
-			}
-		case "Clientes" -> {
-			// Frame Cliente
-			FrameCliente fc = new FrameCliente(this, "Editar", Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()));
-			fc.setVisible(true);
-			}
-		case "Fornecedores" -> {
-			// Frame Fornecedor
-			FrameFornecedor ff = new FrameFornecedor(this, "Editar", Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString()));
-			ff.setVisible(true);
-			}
-		case "NotasFiscais" -> {
-			// Frame NotaFiscal
-			FrameNotaFiscal fnf = new FrameNotaFiscal(this);
-			fnf.setVisible(true);
-			}
-		}
-    }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+	}
+	
+    private void brnRRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnRRActionPerformed
         String msg;
-		boolean status;
-		if (comboBoxFiltro.getSelectedItem().toString().equals("Inativos")) {
+		boolean status = comboBoxFiltro.getSelectedItem().toString().equals("Inativos");
+		if (status) {
 			msg = "restaurar";
-			status = true;
 		} else {
 			msg = "remover";
-			status = false; 
 		}
 		try {
-			boolean confirmar = FrameConfirmar.confirmar(this);
-			if (confirmar) {
-				switch (modo) {
+			if (DialogConfirmar.confirmar(this, "Tem certeza que deseja " + msg + " esse item?")) {
+				switch (ambiente) {
 				case "Produtos" -> {
 					ProdutoController.setStatusProduto(ProdutoDAO.encontrarProduto(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())), status);
 					}
@@ -382,21 +364,21 @@ public class FramePrincipal extends javax.swing.JFrame {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e);
 		}
-		selecionar(modo);
-    }//GEN-LAST:event_btnRemoverActionPerformed
+		selecionar(ambiente);
+    }//GEN-LAST:event_brnRRActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        selecionar(modo);
+        selecionar(ambiente);
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void comboBoxFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFiltroActionPerformed
-        selecionar(modo);
+        selecionar(ambiente);
     }//GEN-LAST:event_comboBoxFiltroActionPerformed
 
 	/*
 		De acordo com o que o usuário selecionar, deixa o botão de tabela ativo ou não.
 	*/
-	public void selecionar(String btn) {
+	public void selecionar(String ambienteSelecionado) {
 		try {
 			// Deixa todos deselecionados
 			btnProdutos.setSelected(false);
@@ -408,10 +390,10 @@ public class FramePrincipal extends javax.swing.JFrame {
 			Object[][] arrayDados = null;
 
 			// Deixa o selecionado ativo
-			switch (btn) {
+			switch (ambienteSelecionado) {
 			case "Produtos" -> {
 				btnProdutos.setSelected(true);
-				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "qtd", "Data Cadastro"};
+				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "Quantidade", "Data Cadastro"};
 				ArrayList<Produto> arrayProdutos = ProdutoDAO.listarProdutos(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
 				arrayDados = ProdutoController.obterDados(arrayProdutos);
 				}
@@ -446,7 +428,7 @@ public class FramePrincipal extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, e);
 		}
 		
-		modo = btn;
+		ambiente = ambienteSelecionado;
 		update();
 	}
 	
@@ -456,13 +438,13 @@ public class FramePrincipal extends javax.swing.JFrame {
 	private void update() {
 		// Verifica a ação do botão excluir
 		if (comboBoxFiltro.getSelectedItem().toString().equals("Inativos")) {
-			btnRemover.setText("Restaurar");
+			brnRR.setText("Restaurar");
 		} else {
-			btnRemover.setText("Remover");
+			brnRR.setText("Remover");
 		}
 		
 		// Deixa ativado ou não as operações
-		if (modo.equals("")) {
+		if (ambiente.equals("")) {
 			txtBuscar.setEnabled(false);
 			comboBoxFiltro.setEnabled(false);
 			btnAdicionar.setEnabled(false);
@@ -475,10 +457,10 @@ public class FramePrincipal extends javax.swing.JFrame {
 		// Mostra ou não as opções de editar ou remover se a tabela estiver selecionada
 		if (table.getSelectedRow() != -1) {
 			btnEditar.setVisible(true);
-			btnRemover.setVisible(true);
+			brnRR.setVisible(true);
 		} else { 
 			btnEditar.setVisible(false);
-			btnRemover.setVisible(false);
+			brnRR.setVisible(false);
 		}
 		
 		revalidate();
@@ -486,13 +468,13 @@ public class FramePrincipal extends javax.swing.JFrame {
 	}
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton brnRR;
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JToggleButton btnClientes;
     private javax.swing.JButton btnEditar;
     private javax.swing.JToggleButton btnFornecedores;
     private javax.swing.JToggleButton btnNotasFiscais;
     private javax.swing.JToggleButton btnProdutos;
-    private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox<String> comboBoxFiltro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

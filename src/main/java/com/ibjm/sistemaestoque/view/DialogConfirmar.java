@@ -10,18 +10,20 @@ import javax.swing.JFrame;
  *
  * @author alcan
  */
-public class FrameConfirmar extends javax.swing.JDialog {
+public class DialogConfirmar extends javax.swing.JDialog {
 
 	private boolean confirmar;
 	
 	/**
 	 * Creates new form FrameConfirmar2
 	 * @param frame
+	 * @param msg
 	 */
-	public FrameConfirmar(JFrame frame) {
+	public DialogConfirmar(JFrame frame, String msg) {
 		super(frame, true);
 		initComponents();
 		setLocationRelativeTo(frame);
+		lbInfo.setText(msg);
 	}
 
 	/**
@@ -40,7 +42,7 @@ public class FrameConfirmar extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Confirmação");
 
-        lbInfo.setText("Tem certeza que deseja excluir esse item?");
+        lbInfo.setText("");
 
         lbNao.setText("Não");
         lbNao.addActionListener(new java.awt.event.ActionListener() {
@@ -63,7 +65,7 @@ public class FrameConfirmar extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lbInfo)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(294, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbSim)
@@ -76,7 +78,7 @@ public class FrameConfirmar extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lbInfo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbNao)
                     .addComponent(lbSim))
@@ -97,8 +99,8 @@ public class FrameConfirmar extends javax.swing.JDialog {
     }//GEN-LAST:event_lbNaoActionPerformed
 
 	// Método estático para exibir o frame e retornar a resposta
-    public static boolean confirmar(JFrame frame) {
-        FrameConfirmar dialog = new FrameConfirmar(frame);
+    public static boolean confirmar(JFrame frame, String msg) {
+        DialogConfirmar dialog = new DialogConfirmar(frame, msg);
         dialog.setVisible(true);
         return dialog.confirmar;
     }

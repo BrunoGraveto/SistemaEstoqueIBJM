@@ -26,8 +26,10 @@ public class ProdutoDAO {
 	private static final String SQL_LIST = "select * from produto ";
 	private static final String SQL_QTD = "select count(*) from produto";
 	private static final String SQL_ENCONTRAR = "select * from produto where id_produto = ?";
-	private static final String SQL_ENCONTRAR_FORNECEDOR = "select * from produto_has_endereco where id_produto = ?";
+	private static final String SQL_ENCONTRAR_FORNECEDOR = "select * from produto_has_fornecedor where id_produto = ?";
 	private static final String SQL_EDIT = "update produto set status_produto = ?, marca_produto = ?, descricao_produto = ?, valor_compra_produto = ?, valor_venda_produto = ?, categoria_produto = ?, qtd_minima_produto = ?, qtd_atual_produto = ?, qtd_maxima_produto = ?, unidade_medida_produto = ?, peso_produto = ?, data_fabricacao_produto = ?, data_validade_produto = ?, data_cadastro_produto = ? where id_produto = ?";
+	private static final String SQL_VF_ASSOCIACAO = "select * from produto_has_fornecedor where id_produto = ? and id_fornecedor = ?";
+	private static final String SQL_DELETE = "delete from produto_has_fornecedor where id_produto = ? and id_fornecedor = ?";
 	
 	/*
 		Adiciona um novo Produto.
@@ -51,7 +53,7 @@ public class ProdutoDAO {
 			pstm.setDate(14, Date.valueOf(produto.getDataCadastro()));
 			pstm.executeUpdate();
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel adicionar o produto!");
+			throw new SQLException("Não foi possivel adicionar o produto: + e");
 		}
 	}
 	
@@ -61,13 +63,72 @@ public class ProdutoDAO {
 	public static void addAssociacaoFornecedor(Produto produto) throws SQLException {
 		try (Connection conexao = ConexaoDAO.conectar();
 		PreparedStatement pstm = conexao.prepareStatement(SQL_ASSOCIACAO)) {
+			// Remover antigos
+			ArrayList<Integer> idsAntigos = getIDFornecedores(encontrarProduto(produto.getID()));
+			ArrayList<Integer> idsAtuais = getIDFornecedores(produto);
+			for (int id : idsAntigos) {
+				System.out.println("id_antigo = " + id);
+				System.out.println("indexof = " + idsAtuais.indexOf(id));
+				if (idsAtuais.indexOf(id) == -1) {
+					removerAssociacao(produto.getID(), id);
+				}
+			}
+			
+			// Adicionar novos
 			for (Fornecedor fornecedor : produto.getFornecedores()) {
-				pstm.setInt(1, produto.getID());
-				pstm.setInt(2, fornecedor.getID());
-				pstm.executeUpdate();
+				if (!verificarAssociacao(produto.getID(), fornecedor.getID())) {
+					pstm.setInt(1, produto.getID());
+					pstm.setInt(2, fornecedor.getID());
+					pstm.executeUpdate();
+				}
 			}
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel adicionar uma associação entre o produto e o Fornecedor!");
+			throw new SQLException("Não foi possivel adicionar a associação entre o produto e o Fornecedor: " + e);
+		}
+	}
+	
+	/*
+		Verifica se ja existe uma associacao.
+	*/
+	public static boolean verificarAssociacao(int idProduto, int idFornecedor) throws SQLException {
+		try (Connection conexao = ConexaoDAO.conectar();
+		PreparedStatement pstm = conexao.prepareStatement(SQL_VF_ASSOCIACAO)) {
+			pstm.setInt(1, idProduto);
+			pstm.setInt(2, idFornecedor);
+			try (ResultSet rs = pstm.executeQuery()) {
+				if (rs.next()) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			throw new SQLException("Problema ao verificar Associação entre Produto e Fornecedor: " + e);
+		}
+		return false;
+	}
+	
+	/*
+		Retorna os ids dos Fornecedores de um Produto
+	*/
+	public static ArrayList<Integer> getIDFornecedores(Produto produto) {
+		ArrayList<Integer> ids = new ArrayList<>();
+		for (Fornecedor fornecedor : produto.getFornecedores()) {
+			ids.add(fornecedor.getID());
+			System.out.println("ids = " + fornecedor.getID());
+		}
+		return ids;
+	}
+	
+	/*
+		Remove uma associacao
+	*/
+	public static void removerAssociacao(int idProduto, int idFornecedor) throws SQLException {
+		try (Connection conexao = ConexaoDAO.conectar();
+		PreparedStatement pstm = conexao.prepareStatement(SQL_DELETE)) {
+			pstm.setInt(1, idProduto);
+			pstm.setInt(2, idFornecedor);
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			throw new SQLException("Problema ao remover associação " + e);
 		}
 	}
 	
@@ -91,11 +152,10 @@ public class ProdutoDAO {
 			pstm.setDate(12, Date.valueOf(produto.getDataFabricacao()));
 			pstm.setDate(13, Date.valueOf(produto.getDataValidade()));
 			pstm.setDate(14, Date.valueOf(produto.getDataCadastro()));
-			pstm.setDate(7, Date.valueOf(produto.getDataCadastro()));
-			pstm.setInt(8, produto.getID());
+			pstm.setInt(15, produto.getID());
 			pstm.executeUpdate();
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel editar o produto!");
+			throw new SQLException("Problema ao verificar Associação: " + e);
 		}
 	}
 	
@@ -126,7 +186,7 @@ public class ProdutoDAO {
 				LocalDate dataValidade = dateValidade.toLocalDate();
 				Date dateCadastro = rs.getDate("data_cadastro_produto");
 				LocalDate dataCadastro = dateCadastro.toLocalDate();
-				ArrayList<Fornecedor> fornecedores = encontrarFornecedoresProduto(id);
+				ArrayList<Fornecedor> fornecedores = getFornecedoresProduto(id);
 				Produto produto = new Produto(id, status, fornecedores, marca, descricao, valorCompra, valorVenda, categoriaP, qtdMinima, qtdAtual, qtdMaxima, unidadeMedida, peso, dataFabricacao, dataValidade, dataCadastro);
 				// Caso o produto esteja inativo, não o coloca no array
 				if (pesquisar(categoria, procurar).equals("") && !status) {
@@ -135,7 +195,7 @@ public class ProdutoDAO {
 				arrayProdutos.add(produto);
 			}
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel listar os produtos!");
+			throw new SQLException("Não foi possivel listar os produtos: " + e);
 		}
 		return arrayProdutos;
 	}
@@ -143,7 +203,7 @@ public class ProdutoDAO {
 	/*
 		Encontra os fornecedores de um determinado produto.
 	*/
-	public static ArrayList<Fornecedor> encontrarFornecedoresProduto(int id) throws SQLException {
+	public static ArrayList<Fornecedor> getFornecedoresProduto(int id) throws SQLException {
 		ArrayList<Fornecedor> arrayFornecedores = new ArrayList<>();
 		try (Connection conexao = ConexaoDAO.conectar();
 		PreparedStatement pstm = conexao.prepareStatement(SQL_ENCONTRAR_FORNECEDOR)) {
@@ -154,7 +214,7 @@ public class ProdutoDAO {
 				}
 			}
 		} catch (Exception e) {
-			throw new SQLException("Não foi encontrar os fornecedores do produto!");
+			throw new SQLException("Não foi encontrar os fornecedores do produto: " + e);
 		}
 		return arrayFornecedores;
 	}
@@ -193,7 +253,7 @@ public class ProdutoDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel encontrar o id do Fornecedor!");
+			throw new SQLException("Não foi possivel encontrar o id do Fornecedor: " + e);
 		}
 		return idFornecedor;
 	}
@@ -225,12 +285,12 @@ public class ProdutoDAO {
 					LocalDate dataValidade = dateValidade.toLocalDate();
 					Date dateCadastro = rs.getDate("data_cadastro_produto");
 					LocalDate dataCadastro = dateCadastro.toLocalDate();
-					ArrayList<Fornecedor> fornecedores = new ArrayList<>();
+					ArrayList<Fornecedor> fornecedores = ProdutoDAO.getFornecedoresProduto(id);
 					produto = new Produto(id, status, fornecedores, marca, descricao, valorCompra, valorVenda, categoriaP, qtdMinima, qtdAtual, qtdMaxima, unidadeMedida, peso, dataFabricacao, dataValidade, dataCadastro);
 				}
 			}
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel encontrar um produto!");
+			throw new SQLException("Não foi possivel encontrar um produto: " + e);
 		}
 		return produto;
 	}
@@ -247,7 +307,7 @@ public class ProdutoDAO {
 				qtd = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel fazer a contagem de registros de produtos!");
+			throw new SQLException("Não foi possivel fazer a contagem de registros de produtos: " + e);
 		}
 		return qtd;
 	}

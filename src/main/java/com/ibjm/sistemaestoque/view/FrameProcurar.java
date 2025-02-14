@@ -1,27 +1,43 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.ibjm.sistemaestoque.view;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import com.ibjm.sistemaestoque.controller.ClienteController;
+import com.ibjm.sistemaestoque.controller.FornecedorController;
+import com.ibjm.sistemaestoque.controller.ProdutoController;
+import com.ibjm.sistemaestoque.model.dao.ClienteDAO;
+import com.ibjm.sistemaestoque.model.dao.FornecedorDAO;
+import com.ibjm.sistemaestoque.model.dao.ProdutoDAO;
+import com.ibjm.sistemaestoque.model.vo.Cliente;
+import com.ibjm.sistemaestoque.model.vo.Fornecedor;
+import com.ibjm.sistemaestoque.model.vo.Produto;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author alcan
  */
-public class PanelProcurar extends javax.swing.JPanel {
+public class FrameProcurar extends javax.swing.JFrame {
 
 	FramePrincipal fp;
+	String ambiente;
 	
 	/**
-	 * Creates new form PanelProcurar
+	 * Creates new form FrameProcurar
 	 * @param fp
+	 * @param ambiente
 	 */
-	public PanelProcurar(FramePrincipal fp) {
+	public FrameProcurar(FramePrincipal fp, String ambiente) {
 		this.fp = fp;
+		this.ambiente = ambiente;
 		initComponents();
+		setLocationRelativeTo(null);
+		selecionar();
 	}
 
 	/**
@@ -39,7 +55,10 @@ public class PanelProcurar extends javax.swing.JPanel {
         lbFiltrar = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnSelecionar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Encontrar Fornecedor");
 
         lbBuscar.setText("Buscar");
 
@@ -68,16 +87,21 @@ public class PanelProcurar extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(table);
 
-        jButton1.setText("Selecionar");
+        btnSelecionar.setText("Selecionar");
+        btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelecionarActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 751, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -93,7 +117,7 @@ public class PanelProcurar extends javax.swing.JPanel {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(btnSelecionar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -111,57 +135,69 @@ public class PanelProcurar extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btnSelecionar)
                 .addContainerGap())
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-
+		selecionar();
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void comboBoxFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFiltroActionPerformed
-
+		selecionar();
     }//GEN-LAST:event_comboBoxFiltroActionPerformed
 
-	private void btnAddEditarActionPerformed(String modoBtn) {
-		String acao = "";
-		int codSelecionado = 0;
-		if (modoBtn.equals("Adicionar")) {
-			acao = "Adicionar";
-			codSelecionado = -1;
-		} else if (modoBtn.equals("Editar")) {
-			acao = "Editar";
-			codSelecionado = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
-		}
-		
-		switch (fp.modo) {
-		case "Produtos" -> {
-			// Frame Produto
-			FrameProduto fpdt = new FrameProduto(fp, acao, codSelecionado);
-			fpdt.setVisible(true);
+    private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSelecionarActionPerformed
+
+	private void selecionar() {
+		try {
+			// Tabela
+			String[] cabecalho = null;
+			Object[][] arrayDados = null;
+
+			switch (ambiente) {
+			case "Produtos" -> {
+				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "qtd", "Data Cadastro"};
+				ArrayList<Produto> arrayProdutos = ProdutoDAO.listarProdutos(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
+				arrayDados = ProdutoController.obterDados(arrayProdutos);
+				}
+			case "Clientes" -> {
+				cabecalho = new String[] {"Codigo", "Status", "Nome", "CPF", "RG", "Endereço", "Telefone", "Email", "Data Cadastro"};
+				ArrayList<Cliente> arrayClientes = ClienteDAO.listarClientes(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
+				arrayDados = ClienteController.obterDados(arrayClientes);
+				}
+			case "Fornecedores" -> {
+				cabecalho = new String[] {"Codigo", "Status", "Nome", "CNPJ", "Inscrição Estadual", "CNAE", "Endereço", "Telefone", "Email", "Data Cadastro"};
+				ArrayList<Fornecedor> arrayFornecedores = FornecedorDAO.listarFornecedores(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
+				arrayDados = FornecedorController.obterDados(arrayFornecedores);
+				}
+			case "NotasFiscais" -> {
+	//			cabecalho = new String[] {"Codigo", "Status", "Nome", "CNPJ", "Endereço", "Email", "Telefone", "Data Cadastro"};
+	//			ArrayList<NotaFiscal> arrayNotasFiscais = NotaFiscalDAO.listarFornecedores();
+	//			arrayDados = NotaFiscalController.obterDados(arrayNotasFiscais);
+				}
 			}
-		case "Clientes" -> {
-			// Frame Cliente
-			FrameCliente fc = new FrameCliente(fp, acao, codSelecionado);
-			fc.setVisible(true);
-			}
-		case "Fornecedores" -> {
-			// Frame Fornecedor
-			FrameFornecedor ff = new FrameFornecedor(fp, acao, codSelecionado);
-			ff.setVisible(true);
-			}
-		case "NotasFiscais" -> {
-			// Frame NotaFiscal
-			FrameNotaFiscal fnf = new FrameNotaFiscal(fp);
-			fnf.setVisible(true);
-			}
+
+			// Altera a tabela
+			table.setModel(new DefaultTableModel(arrayDados, cabecalho) {
+				@Override
+				public boolean isCellEditable(int row, int col) {
+					return false;
+				}
+			});
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(this, "Problema ao carregar tabela: " + e);
 		}
 	}
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSelecionar;
     private javax.swing.JComboBox<String> comboBoxFiltro;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbBuscar;
     private javax.swing.JLabel lbFiltrar;
