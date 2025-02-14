@@ -104,7 +104,7 @@ public class FornecedorDAO {
 				Date dateCadastro = rs.getDate("data_cadastro_fornecedor");
 				LocalDate dataCadastro = dateCadastro.toLocalDate();
 				Endereco endereco = EnderecoDAO.encontrarEndereco(encontrarIdEndereco(id));
-				Fornecedor fornecedor = new Fornecedor(id, status, nome, cnpj, inscricaoEstadual, cnae, endereco, email, telefone, dataCadastro);
+				Fornecedor fornecedor = new Fornecedor(id, status, nome, cnpj, inscricaoEstadual, cnae, endereco, telefone, email, dataCadastro);
 				// Caso o fornecedor esteja inativo, não o coloca no array
 				if (pesquisar(categoria, procurar).equals("") && !status) {
 					continue;
