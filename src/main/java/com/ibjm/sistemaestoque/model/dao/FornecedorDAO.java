@@ -124,8 +124,13 @@ public class FornecedorDAO {
 		// Altera a categoria para o determinado nome da coluna
 		switch (categoria) {
 		case "Codigo" -> categoria = "id_fornecedor";
-		case "Nome" -> categoria = "nome_fornecedor";
+		case "Nome Fantasia" -> categoria = "nome_fornecedor";
 		case "Inativos" -> categoria = "status_fornecedor";
+		case "CNPJ" -> categoria = "nome_fornecedor";
+		case "Inscrição Estadual" -> categoria = "inscricao_estadual_fornecedor";
+		case "CNAE" -> categoria = "cnae_fornecedor";
+		case "Telefone" -> categoria = "telefone_fornecedor";
+		case "Email" -> categoria = "email_fornecedor";
 		}
 		// Retorna o determinado comando sql
 		if (categoria.equals("status_fornecedor")) {

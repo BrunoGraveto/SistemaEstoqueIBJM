@@ -41,22 +41,8 @@ public class NotaFiscalRN {
             }
         }
 		
-        if (notaFiscal.getValorProdutos() < 0) {
+		if (notaFiscal.getValorTotal() < 0) {
             throw new Exception("Valor dos produtos inválido: não pode ser negativo.");
-        }
-		
-        if (notaFiscal.getValorImpostos() < 0) {
-            throw new Exception("Valor dos impostos inválido: não pode ser negativo.");
-        }
-		
-        double valorTotalCalculado = notaFiscal.getValorProdutos() + notaFiscal.getValorImpostos();
-		
-        if (notaFiscal.getValorTotal() != valorTotalCalculado) {
-            throw new Exception("Valor total inválido: deve ser igual à soma do valor dos produtos e impostos.");
-        }
-		
-        if (notaFiscal.getPagamento() == null) {
-            throw new Exception("Informação de pagamento inválida: o pagamento não pode ser nulo.");
         }
 		
         if (notaFiscal.getDataCadastro() == null || notaFiscal.getDataCadastro().isAfter(LocalDate.now())) {

@@ -409,16 +409,16 @@ public class FrameProduto extends javax.swing.JFrame {
 			double valorCompra = Double.parseDouble(txtValorCompra.getText());
 			double valorVenda = Double.parseDouble(txtValorVenda.getText());
 			String categoria = comboBoxCategoria.getSelectedItem().toString();
-			int qtdMin = Integer.parseInt(txtQtdMin.getText());
+			int qtdMinima = Integer.parseInt(txtQtdMin.getText());
 			int qtdAtual = Integer.parseInt(txtQtdAtual.getText());
-			int qtdMax = Integer.parseInt(txtQtdMax.getText());
+			int qtdMaxima = Integer.parseInt(txtQtdMax.getText());
 			String unidadeMedida = txtUnidadeMedida.getText();
 			double peso = Double.parseDouble(txtPeso.getText());
 			LocalDate dataFabricacao = LocalDate.parse(txtDataFabricacao.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			LocalDate dataValidade = LocalDate.parse(txtDataValidade.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			LocalDate dataCadastro = LocalDate.parse(txtDataCadastro.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			// Produto
-			Produto produto = new Produto(id, status, fornecedores, marca, descricao, valorCompra, valorVenda, categoria, qtdMin, qtdAtual, qtdMax, unidadeMedida, peso, dataFabricacao, dataValidade, dataCadastro);
+			Produto produto = new Produto(id, status, fornecedores, marca, descricao, categoria, unidadeMedida, peso, valorCompra, valorVenda, qtdMinima, qtdAtual, qtdMaxima, dataFabricacao, dataValidade, dataCadastro);
 			// Adiciona ou Edita
 			if (modo.equals("Adicionar")) {
 				ProdutoController.addProduto(produto);
@@ -496,7 +496,6 @@ public class FrameProduto extends javax.swing.JFrame {
 				Produto produto = ProdutoDAO.encontrarProduto(codSelecionado);
 				txtCod.setText(produto.getID()+"");
 				txtDataCadastro.setText(produto.getDataCadastroString());
-				txtCod.setText(String.valueOf(produto.getID()));
 				txtMarca.setText(produto.getMarca());
 				txtDescricao.setText(produto.getDescricao());
 				txtValorCompra.setText(String.valueOf(produto.getValorCompra()));

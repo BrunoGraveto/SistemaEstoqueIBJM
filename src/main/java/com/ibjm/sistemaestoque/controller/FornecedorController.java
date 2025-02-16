@@ -32,7 +32,7 @@ public class FornecedorController {
 		
 		// Passa pelo array list os colocando no array de objetos
 		for (Fornecedor fornecedor : arrayFornecedores) {
-			arrayDados[linha][coluna++] = fornecedor.getID();
+			arrayDados[linha][coluna++] = String.format("%04d", fornecedor.getID());
 			arrayDados[linha][coluna++] = fornecedor.getAtividade();
 			arrayDados[linha][coluna++] = fornecedor.getNome();
 			arrayDados[linha][coluna++] = fornecedor.getCnpj();
@@ -41,7 +41,7 @@ public class FornecedorController {
 			arrayDados[linha][coluna++] = fornecedor.getEndereco().getRua() + ", " + fornecedor.getEndereco().getNum() + " - " + fornecedor.getEndereco().getBairro() + ", " + fornecedor.getEndereco().getCidade() + " - " + fornecedor.getEndereco().getEstado();
 			arrayDados[linha][coluna++] = fornecedor.getTelefone();
 			arrayDados[linha][coluna++] = fornecedor.getEmail();
-			arrayDados[linha++][coluna++] = fornecedor.getDataCadastroString();
+			arrayDados[linha++][coluna] = fornecedor.getDataCadastroString();
 			coluna = 0;
 		}
 		

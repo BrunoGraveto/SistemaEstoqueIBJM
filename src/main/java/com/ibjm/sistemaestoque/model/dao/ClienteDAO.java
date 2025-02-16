@@ -122,8 +122,12 @@ public class ClienteDAO {
 		// Altera a categoria para o determinado nome da coluna
 		switch (categoria) {
 		case "Codigo" -> categoria = "id_cliente";
-		case "Nome" -> categoria = "nome_cliente";
 		case "Inativos" -> categoria = "status_cliente";
+		case "Nome" -> categoria = "nome_cliente";
+		case "CPF" -> categoria = "cpf_cliente";
+		case "RG" -> categoria = "rg_cliente";
+		case "Telefone" -> categoria = "telefone_cliente";
+		case "Email" -> categoria = "email_cliente";
 		}
 		// Retorna o determinado comando sql
 		if (categoria.equals("status_cliente")) {

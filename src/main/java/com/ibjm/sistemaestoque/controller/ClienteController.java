@@ -30,7 +30,7 @@ public class ClienteController {
 		
 		// Passa pelo array list os colocando no array de objetos
 		for (Cliente cliente : arrayClientes) {
-			arrayDados[linha][coluna++] = cliente.getID();
+			arrayDados[linha][coluna++] = String.format("%04d", cliente.getID());
 			arrayDados[linha][coluna++] = cliente.getAtividade();
 			arrayDados[linha][coluna++] = cliente.getNome();
 			arrayDados[linha][coluna++] = cliente.getCpf();
@@ -38,7 +38,7 @@ public class ClienteController {
 			arrayDados[linha][coluna++] = cliente.getEndereco().getRua() + ", " + cliente.getEndereco().getNum() + " - " + cliente.getEndereco().getBairro() + ", " + cliente.getEndereco().getCidade() + " - " + cliente.getEndereco().getEstado();
 			arrayDados[linha][coluna++] = cliente.getTelefone();
 			arrayDados[linha][coluna++] = cliente.getEmail();
-			arrayDados[linha++][coluna++] = cliente.getDataCadastroString();
+			arrayDados[linha++][coluna] = cliente.getDataCadastroString();
 			coluna = 0;
 		}
 		

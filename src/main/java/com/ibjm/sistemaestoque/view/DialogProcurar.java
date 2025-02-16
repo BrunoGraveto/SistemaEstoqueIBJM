@@ -183,7 +183,7 @@ public class DialogProcurar extends javax.swing.JDialog {
 
 			switch (ambiente) {
 			case "Produtos" -> {
-				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "qtd", "Data Cadastro"};
+				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Categoria", "Uni. Medida", "Peso", "Val. Compra", "Val. Venda", "Qtd. Mín.", "Qtd. Atual", "Qtd. Max.", "Data Fab.", "Data Val.", "Data Cadastro"};
 				ArrayList<Produto> arrayProdutos = ProdutoDAO.listarProdutos(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
 				arrayDados = ProdutoController.obterDados(arrayProdutos);
 				}

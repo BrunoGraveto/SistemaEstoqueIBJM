@@ -67,8 +67,6 @@ public class ProdutoDAO {
 			ArrayList<Integer> idsAntigos = getIDFornecedores(encontrarProduto(produto.getID()));
 			ArrayList<Integer> idsAtuais = getIDFornecedores(produto);
 			for (int id : idsAntigos) {
-				System.out.println("id_antigo = " + id);
-				System.out.println("indexof = " + idsAtuais.indexOf(id));
 				if (idsAtuais.indexOf(id) == -1) {
 					removerAssociacao(produto.getID(), id);
 				}
@@ -113,7 +111,6 @@ public class ProdutoDAO {
 		ArrayList<Integer> ids = new ArrayList<>();
 		for (Fornecedor fornecedor : produto.getFornecedores()) {
 			ids.add(fornecedor.getID());
-			System.out.println("ids = " + fornecedor.getID());
 		}
 		return ids;
 	}
@@ -187,7 +184,7 @@ public class ProdutoDAO {
 				Date dateCadastro = rs.getDate("data_cadastro_produto");
 				LocalDate dataCadastro = dateCadastro.toLocalDate();
 				ArrayList<Fornecedor> fornecedores = getFornecedoresProduto(id);
-				Produto produto = new Produto(id, status, fornecedores, marca, descricao, valorCompra, valorVenda, categoriaP, qtdMinima, qtdAtual, qtdMaxima, unidadeMedida, peso, dataFabricacao, dataValidade, dataCadastro);
+				Produto produto = new Produto(id, status, fornecedores, marca, descricao, categoriaP, unidadeMedida, peso, valorCompra, valorVenda, qtdMinima, qtdAtual, qtdMaxima, dataFabricacao, dataValidade, dataCadastro);
 				// Caso o produto esteja inativo, não o coloca no array
 				if (pesquisar(categoria, procurar).equals("") && !status) {
 					continue;
@@ -226,8 +223,9 @@ public class ProdutoDAO {
 		// Altera a categoria para o determinado nome da coluna
 		switch (categoria) {
 		case "Codigo" -> categoria = "id_produto";
-		case "Nome" -> categoria = "nome_produto";
 		case "Inativos" -> categoria = "status_produto";
+		case "Descrição" -> categoria = "descricao_produto";
+		case "Marca" -> categoria = "marca_produto";
 		}
 		// Retorna o determinado comando sql
 		if (categoria.equals("status_produto")) {
@@ -262,7 +260,6 @@ public class ProdutoDAO {
 		Encontra um determinado produto pelo codigo.
 	*/
 	public static Produto encontrarProduto(int id) throws SQLException {
-		Produto produto = null;
 		try (Connection conexao = ConexaoDAO.conectar();
 		PreparedStatement pstm = conexao.prepareStatement(SQL_ENCONTRAR)) {
 			pstm.setInt(1, id);
@@ -286,13 +283,13 @@ public class ProdutoDAO {
 					Date dateCadastro = rs.getDate("data_cadastro_produto");
 					LocalDate dataCadastro = dateCadastro.toLocalDate();
 					ArrayList<Fornecedor> fornecedores = ProdutoDAO.getFornecedoresProduto(id);
-					produto = new Produto(id, status, fornecedores, marca, descricao, valorCompra, valorVenda, categoriaP, qtdMinima, qtdAtual, qtdMaxima, unidadeMedida, peso, dataFabricacao, dataValidade, dataCadastro);
+					return new Produto(id, status, fornecedores, marca, descricao, categoriaP, unidadeMedida, peso, valorCompra, valorVenda, qtdMinima, qtdAtual, qtdMaxima, dataFabricacao, dataValidade, dataCadastro);
 				}
 			}
 		} catch (SQLException e) {
 			throw new SQLException("Não foi possivel encontrar um produto: " + e);
 		}
-		return produto;
+		return null;
 	}
 	
 	/*
@@ -310,6 +307,22 @@ public class ProdutoDAO {
 			throw new SQLException("Não foi possivel fazer a contagem de registros de produtos: " + e);
 		}
 		return qtd;
+	}
+	
+	public static int getQtdProdutoReal(int id) throws SQLException{
+		try (Connection conexao = ConexaoDAO.conectar();
+		PreparedStatement pstm = conexao.prepareStatement("select * from nf_has_produto where id_produto = ?")) {
+			pstm.setInt(1, id);
+			try (ResultSet rs = pstm.executeQuery()) {
+				int qtdTotal = encontrarProduto(id).getQtdAtual();
+				while (rs.next()) {
+					qtdTotal -= rs.getInt("qtd_produto"); 
+				}
+				return qtdTotal;
+			}
+		} catch (Exception e) {
+			throw new SQLException("Não foi possivel fazer a contagem da Quantidade do Produto: " + e);
+		}
 	}
 	
 }

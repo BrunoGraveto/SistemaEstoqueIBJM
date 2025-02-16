@@ -5,6 +5,7 @@
 package com.ibjm.sistemaestoque.model.vo;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -15,28 +16,46 @@ public class NotaFiscal {
 	
 	private int id;
 	private boolean status;
-	private Cliente cliente;
 	private String observacao;
+	private Cliente cliente;
 	private ArrayList<Produto> produtos;
-	private double valorProdutos;
-	private double valorImpostos;
 	private double valorTotal;
-	Pagamento pagamento;
+	String formaPagamento;
 	LocalDate dataCadastro;
+	LocalDate dataSaida;
 
-	public NotaFiscal(int id, boolean status, Cliente cliente, String observacao, ArrayList<Produto> produtos, double valorProdutos, double valorImpostos, double valorTotal, Pagamento pagamento, LocalDate dataCadastro) {
+	public NotaFiscal(int id, boolean status, String observacao, Cliente cliente, ArrayList<Produto> produtos, double valorTotal, String formaPagamento, LocalDate dataCadastro, LocalDate dataSaida) {
 		this.id = id;
 		this.status = status;
-		this.cliente = cliente;
 		this.observacao = observacao;
+		this.cliente = cliente;
 		this.produtos = produtos;
-		this.valorProdutos = valorProdutos;
-		this.valorImpostos = valorImpostos;
 		this.valorTotal = valorTotal;
-		this.pagamento = pagamento;
+		this.formaPagamento = formaPagamento;
 		this.dataCadastro = dataCadastro;
+		this.dataSaida = dataSaida;
 	}
-
+	
+	public String getValorTotalString() {
+		return "R$ " + valorTotal;
+	}
+	
+	public String getDataCadastroString() {
+		return dataCadastro.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	}
+	
+	public String getDataSaidaString() {
+		return dataSaida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	}
+	
+	public String getAtividade() {
+		if (status) {
+			return "Ativo";
+		} else {
+			return "Inativo";
+		}
+	}
+	
 	public int getID() {
 		return id;
 	}
@@ -53,20 +72,20 @@ public class NotaFiscal {
 		this.status = status;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
 	public String getObservacao() {
 		return observacao;
 	}
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public ArrayList<Produto> getProdutos() {
@@ -77,22 +96,6 @@ public class NotaFiscal {
 		this.produtos = produtos;
 	}
 
-	public double getValorProdutos() {
-		return valorProdutos;
-	}
-
-	public void setValorProdutos(double valorProdutos) {
-		this.valorProdutos = valorProdutos;
-	}
-
-	public double getValorImpostos() {
-		return valorImpostos;
-	}
-
-	public void setValorImpostos(double valorImpostos) {
-		this.valorImpostos = valorImpostos;
-	}
-
 	public double getValorTotal() {
 		return valorTotal;
 	}
@@ -101,12 +104,12 @@ public class NotaFiscal {
 		this.valorTotal = valorTotal;
 	}
 
-	public Pagamento getPagamento() {
-		return pagamento;
+	public String getFormaPagamento() {
+		return formaPagamento;
 	}
 
-	public void setPagamento(Pagamento pagamento) {
-		this.pagamento = pagamento;
+	public void setPagamento(String formaPagamento) {
+		this.formaPagamento = formaPagamento;
 	}
 
 	public LocalDate getDataCadastro() {
@@ -117,6 +120,12 @@ public class NotaFiscal {
 		this.dataCadastro = dataCadastro;
 	}
 
-	
+	public LocalDate getDataSaida() {
+		return dataSaida;
+	}
+
+	public void setDataSaida(LocalDate dataSaida) {
+		this.dataSaida = dataSaida;
+	}
 	
 }

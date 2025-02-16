@@ -19,35 +19,47 @@ public class Produto {
 	ArrayList<Fornecedor> fornecedores;
 	private String marca;
 	private String descricao;
+	private String categoria;
+	private String unidadeMedida;
+	private double peso;
 	private double valorCompra;
 	private double valorVenda;
-	private String categoria;
 	private int qtdMinima;
 	private int qtdAtual;
 	private int qtdMaxima;
-	private String unidadeMedida;
-	private double peso;
 	private LocalDate dataFabricacao;
 	private LocalDate dataValidade;
 	private LocalDate dataCadastro;
 
-	public Produto(int id, boolean status, ArrayList<Fornecedor> fornecedores, String marca, String descricao, double valorCompra, double valorVenda, String categoria, int qtdMinima, int qtdAtual, int qtdMaxima, String unidadeMedida, double peso, LocalDate dataFabricacao, LocalDate dataValidade, LocalDate dataCadastro) {
+	public Produto(int id, boolean status, ArrayList<Fornecedor> fornecedores, String marca, String descricao, String categoria, String unidadeMedida, double peso, double valorCompra, double valorVenda, int qtdMinima, int qtdAtual, int qtdMaxima, LocalDate dataFabricacao, LocalDate dataValidade, LocalDate dataCadastro) {
 		this.id = id;
 		this.status = status;
 		this.fornecedores = fornecedores;
 		this.marca = marca;
 		this.descricao = descricao;
+		this.categoria = categoria;
+		this.unidadeMedida = unidadeMedida;
+		this.peso = peso;
 		this.valorCompra = valorCompra;
 		this.valorVenda = valorVenda;
-		this.categoria = categoria;
 		this.qtdMinima = qtdMinima;
 		this.qtdAtual = qtdAtual;
 		this.qtdMaxima = qtdMaxima;
-		this.unidadeMedida = unidadeMedida;
-		this.peso = peso;
 		this.dataFabricacao = dataFabricacao;
 		this.dataValidade = dataValidade;
 		this.dataCadastro = dataCadastro;
+	}
+	
+	public String getValorVendaTotalString(int qtd) {
+		return "R$ " + (valorVenda * qtd);
+	}
+	
+	public String getValorCompraString() {
+		return "R$ " + valorCompra; 
+	}
+	
+	public String getValorVendaString() {
+		return "R$ " + valorVenda; 
 	}
 	
 	public String getDataFabricacaoString() {
@@ -110,6 +122,30 @@ public class Produto {
 		this.descricao = descricao;
 	}
 
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
+	public String getUnidadeMedida() {
+		return unidadeMedida;
+	}
+
+	public void setUnidadeMedida(String unidadeMedida) {
+		this.unidadeMedida = unidadeMedida;
+	}
+
+	public double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(double peso) {
+		this.peso = peso;
+	}
+
 	public double getValorCompra() {
 		return valorCompra;
 	}
@@ -124,14 +160,6 @@ public class Produto {
 
 	public void setValorVenda(double valorVenda) {
 		this.valorVenda = valorVenda;
-	}
-
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
 	}
 
 	public int getQtdMinima() {
@@ -158,22 +186,6 @@ public class Produto {
 		this.qtdMaxima = qtdMaxima;
 	}
 
-	public String getUnidadeMedida() {
-		return unidadeMedida;
-	}
-
-	public void setUnidadeMedida(String unidadeMedida) {
-		this.unidadeMedida = unidadeMedida;
-	}
-
-	public double getPeso() {
-		return peso;
-	}
-
-	public void setPeso(double peso) {
-		this.peso = peso;
-	}
-
 	public LocalDate getDataFabricacao() {
 		return dataFabricacao;
 	}
@@ -197,7 +209,5 @@ public class Produto {
 	public void setDataCadastro(LocalDate dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
-	
-	
 	
 }

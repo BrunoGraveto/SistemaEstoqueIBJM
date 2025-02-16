@@ -18,10 +18,7 @@ import com.ibjm.sistemaestoque.model.vo.NotaFiscal;
 import com.ibjm.sistemaestoque.model.vo.Produto;
 import java.awt.Font;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -47,7 +44,7 @@ public class FramePrincipal extends javax.swing.JFrame {
 		initComponents();
 		setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 		update();
-                
+		setFocusable(true);
 	}
 
 	/**
@@ -78,9 +75,6 @@ public class FramePrincipal extends javax.swing.JFrame {
         brnRR = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IBJM");
@@ -90,7 +84,7 @@ public class FramePrincipal extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Ambientes"));
 
         btnProdutos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img-produto.png"))); // NOI18N
         btnProdutos.addActionListener(new java.awt.event.ActionListener() {
@@ -120,16 +114,16 @@ public class FramePrincipal extends javax.swing.JFrame {
             }
         });
 
-        texFornecedores.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texFornecedores.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         texFornecedores.setText("Fornecedores");
 
-        texNotaFiscal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texNotaFiscal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         texNotaFiscal.setText("Notas Fiscais");
 
-        texProdutos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texProdutos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         texProdutos.setText("Estoque");
 
-        texCliente.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        texCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         texCliente.setText("Clientes");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -140,19 +134,27 @@ public class FramePrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(texProdutos))
-                .addGap(9, 9, 9)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(texProdutos)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(texCliente))
-                .addGap(9, 9, 9)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(texCliente)
+                        .addGap(23, 23, 23)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(texFornecedores))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(texFornecedores)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNotasFiscais, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(texNotaFiscal))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(texNotaFiscal)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -160,10 +162,12 @@ public class FramePrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 6, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNotasFiscais, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(texNotaFiscal))
+                        .addComponent(btnNotasFiscais, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(texNotaFiscal)
+                            .addComponent(texFornecedores)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -171,15 +175,13 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(texFornecedores)
-                            .addComponent(texCliente)))
+                        .addComponent(texCliente))
                     .addComponent(btnFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        panelOperacoes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        setVisible(false);
+        panelOperacoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabela"));
+        panelOperacoes.setVisible(false);
 
         jLabel1.setText("Buscar");
 
@@ -238,7 +240,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addGroup(panelOperacoesLayout.createSequentialGroup()
                         .addGroup(panelOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelOperacoesLayout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                                 .addGap(516, 516, 516))
                             .addComponent(txtBuscar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -260,7 +262,6 @@ public class FramePrincipal extends javax.swing.JFrame {
         panelOperacoesLayout.setVerticalGroup(
             panelOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelOperacoesLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(panelOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelOperacoesLayout.createSequentialGroup()
                         .addGroup(panelOperacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -275,17 +276,9 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addComponent(btnAdicionar)
                     .addComponent(brnRR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -314,51 +307,59 @@ public class FramePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
+		comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Codigo", "Descrição", "Marca", "Inativos"}));
+		txtBuscar.setText("");
+		btnProdutos.setEnabled(false);
+		btnClientes.setEnabled(true);
+		btnNotasFiscais.setEnabled(true);
+		btnFornecedores.setEnabled(true);
+		texProdutos.setFont(new Font("Arial", Font.BOLD, 12));
+		texCliente.setFont(new Font("Arial", Font.PLAIN, 12));
+		texFornecedores.setFont(new Font("Arial", Font.PLAIN, 12));
+		texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 12));
 		selecionar("Produtos");
-                btnProdutos.setEnabled(false);
-                btnClientes.setEnabled(true);
-                btnNotasFiscais.setEnabled(true);
-                btnFornecedores.setEnabled(true);
-                texProdutos.setFont(new Font("Arial", Font.BOLD, 14));
-                texCliente.setFont(new Font("Arial", Font.PLAIN, 14));
-                texFornecedores.setFont(new Font("Arial", Font.PLAIN, 14));
-                texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 14));
     }//GEN-LAST:event_btnProdutosActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+		comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Codigo", "Nome", "CPF", "RG", "Telefone", "Email", "Inativos"}));
+		txtBuscar.setText("");
+		btnProdutos.setEnabled(true);
+		btnClientes.setEnabled(false);
+		btnNotasFiscais.setEnabled(true);
+		btnFornecedores.setEnabled(true);
+		texProdutos.setFont(new Font("Arial", Font.PLAIN, 12));
+		texCliente.setFont(new Font("Arial", Font.BOLD, 12));
+		texFornecedores.setFont(new Font("Arial", Font.PLAIN, 12));
+		texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 12));
 		selecionar("Clientes");
-                btnProdutos.setEnabled(true);
-                btnClientes.setEnabled(false);
-                btnNotasFiscais.setEnabled(true);
-                btnFornecedores.setEnabled(true);
-                texProdutos.setFont(new Font("Arial", Font.PLAIN, 14));
-                texCliente.setFont(new Font("Arial", Font.BOLD, 14));
-                texFornecedores.setFont(new Font("Arial", Font.PLAIN, 14));
-                texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 14));
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFornecedoresActionPerformed
+		comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Codigo", "Nome Fantasia", "CNPJ", "Inscrição Estadual", "CNAE", "Telefone", "Email"}));
+		txtBuscar.setText("");
+		btnProdutos.setEnabled(true);
+		btnClientes.setEnabled(true);
+		btnNotasFiscais.setEnabled(true);
+		btnFornecedores.setEnabled(false);
+		texProdutos.setFont(new Font("Arial", Font.PLAIN, 12));
+		texCliente.setFont(new Font("Arial", Font.PLAIN, 12));
+		texFornecedores.setFont(new Font("Arial", Font.BOLD, 12));
+		texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 12));
 		selecionar("Fornecedores");
-                btnProdutos.setEnabled(true);
-                btnClientes.setEnabled(true);
-                btnNotasFiscais.setEnabled(true);
-                btnFornecedores.setEnabled(false);
-                texProdutos.setFont(new Font("Arial", Font.PLAIN, 14));
-                texCliente.setFont(new Font("Arial", Font.PLAIN, 14));
-                texFornecedores.setFont(new Font("Arial", Font.BOLD, 14));
-                texNotaFiscal.setFont(new Font("Arial", Font.PLAIN, 14));
     }//GEN-LAST:event_btnFornecedoresActionPerformed
 
     private void btnNotasFiscaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotasFiscaisActionPerformed
+		comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Número", "Observação", "Finalizadas"}));
+		txtBuscar.setText("");
+		btnProdutos.setEnabled(true);
+		btnClientes.setEnabled(true);
+		btnNotasFiscais.setEnabled(false);
+		btnFornecedores.setEnabled(true);
+		texProdutos.setFont(new Font("Arial", Font.PLAIN, 12));
+		texCliente.setFont(new Font("Arial", Font.PLAIN, 12));
+		texFornecedores.setFont(new Font("Arial", Font.PLAIN, 12));
+		texNotaFiscal.setFont(new Font("Arial", Font.BOLD, 12));
 		selecionar("NotasFiscais");
-                btnProdutos.setEnabled(true);
-                btnClientes.setEnabled(true);
-                btnNotasFiscais.setEnabled(false);
-                btnFornecedores.setEnabled(true);
-                texProdutos.setFont(new Font("Arial", Font.PLAIN, 14));
-                texCliente.setFont(new Font("Arial", Font.PLAIN, 14));
-                texFornecedores.setFont(new Font("Arial", Font.PLAIN, 14));
-                texNotaFiscal.setFont(new Font("Arial", Font.BOLD, 14));
     }//GEN-LAST:event_btnNotasFiscaisActionPerformed
 
 	/*
@@ -395,6 +396,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                         FornecedorController.setStatusFornecedor(FornecedorDAO.encontrarFornecedor(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())), status);
                     }
                     case "NotasFiscais" -> {
+						NotaFiscalController.setStatusNotaFiscal(NotaFiscalDAO.encontrarNotaFiscal(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())), status);
                     }
                 }
             }
@@ -405,7 +407,8 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_brnRRActionPerformed
 
     private void comboBoxFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFiltroActionPerformed
-        selecionar(ambiente);
+        txtBuscar.setText("");
+		selecionar(ambiente);
     }//GEN-LAST:event_comboBoxFiltroActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
@@ -441,7 +444,7 @@ public class FramePrincipal extends javax.swing.JFrame {
 			}
 		case "NotasFiscais" -> {
 			// Frame NotaFiscal
-			FrameNotaFiscal fnf = new FrameNotaFiscal(this);
+			FrameNotaFiscal fnf = new FrameNotaFiscal(this, acao, codSelecionado);
 			fnf.setVisible(true);
 			}
 		}
@@ -451,15 +454,15 @@ public class FramePrincipal extends javax.swing.JFrame {
 		De acordo com o que o usuário selecionar, deixa o botão de tabela ativo ou não.
 	*/
 	public void selecionar(String ambienteSelecionado) {
+		panelOperacoes.setVisible(true);
 		try {
-
 			String[] cabecalho = null;
 			Object[][] arrayDados = null;
 
 			// Deixa o selecionado ativo
 			switch (ambienteSelecionado) {
 			case "Produtos" -> {
-				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Valor Compra", "Valor Venda", "Quantidade", "Data Cadastro"};
+				cabecalho = new String[] {"Codigo", "Status", "Marca", "Descrição", "Categoria", "Uni. Medida", "Peso", "Val. Compra", "Val. Venda", "Qtd. Mín.", "Qtd. Atual", "Qtd. Max.", "Data Fab.", "Data Val.", "Data Cadastro"};
 				ArrayList<Produto> arrayProdutos = ProdutoDAO.listarProdutos(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
 				arrayDados = ProdutoController.obterDados(arrayProdutos);
 				}
@@ -474,13 +477,13 @@ public class FramePrincipal extends javax.swing.JFrame {
 				arrayDados = FornecedorController.obterDados(arrayFornecedores);
 				}
 			case "NotasFiscais" -> {
-	//			cabecalho = new String[] {"Codigo", "Status", "Nome", "CNPJ", "Endereço", "Email", "Telefone", "Data Cadastro"};
-	//			ArrayList<NotaFiscal> arrayNotasFiscais = NotaFiscalDAO.listarFornecedores();
-	//			arrayDados = NotaFiscalController.obterDados(arrayNotasFiscais);
+				cabecalho = new String[] {"Codigo", "Status", "Nome Cliente", "Observação", "Val. Total", "Forma Pag.", "Data Cadastro", "Data Saída"};
+				ArrayList<NotaFiscal> arrayNotasFiscais = NotaFiscalDAO.listarNotasFiscais(comboBoxFiltro.getSelectedItem().toString(), txtBuscar.getText());
+				arrayDados = NotaFiscalController.obterDadosNotaFiscal(arrayNotasFiscais);
 				}
 			}
 
-			// Altera a tabela
+			// Altera a tabela e não deixa editar
 			table.setModel(new DefaultTableModel(arrayDados, cabecalho) {
 				@Override
 				public boolean isCellEditable(int row, int col) {
@@ -541,9 +544,6 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboBoxFiltro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelOperacoes;

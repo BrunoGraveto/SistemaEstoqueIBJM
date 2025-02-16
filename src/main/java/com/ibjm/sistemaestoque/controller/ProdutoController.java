@@ -7,7 +7,7 @@ package com.ibjm.sistemaestoque.controller;
 import com.ibjm.sistemaestoque.model.dao.ProdutoDAO;
 import com.ibjm.sistemaestoque.model.rn.ProdutoRN;
 import com.ibjm.sistemaestoque.model.vo.Produto;
-import com.ibjm.sistemaestoque.model.vo.Fornecedor;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +20,7 @@ public class ProdutoController {
 		Converte um ArrayList com os Produtos em um array de objetos para
 		colocar na tabela.
 	*/
-	public static Object[][] obterDados(ArrayList<Produto> arrayProdutos) {
+	public static Object[][] obterDados(ArrayList<Produto> arrayProdutos) throws SQLException {
 		// Vars aux
 		int linha = 0;
 		int coluna = 0;
@@ -30,21 +30,21 @@ public class ProdutoController {
 		
 		// Passa pelo array list os colocando no array de objetos
 		for (Produto produto : arrayProdutos) {
-			arrayDados[linha][coluna++] = produto.getID();
+			arrayDados[linha][coluna++] = String.format("%04d", produto.getID());
 			arrayDados[linha][coluna++] = produto.getAtividade();
 			arrayDados[linha][coluna++] = produto.getMarca();
 			arrayDados[linha][coluna++] = produto.getDescricao();
-			arrayDados[linha][coluna++] = produto.getValorCompra();
-			arrayDados[linha][coluna++] = produto.getValorVenda();
 			arrayDados[linha][coluna++] = produto.getCategoria();
-			arrayDados[linha][coluna++] = produto.getQtdMinima();
-			arrayDados[linha][coluna++] = produto.getQtdAtual();
-			arrayDados[linha][coluna++] = produto.getQtdMaxima();
 			arrayDados[linha][coluna++] = produto.getUnidadeMedida();
 			arrayDados[linha][coluna++] = produto.getPeso();
+			arrayDados[linha][coluna++] = produto.getValorCompraString();
+			arrayDados[linha][coluna++] = produto.getValorVendaString();
+			arrayDados[linha][coluna++] = produto.getQtdMinima();
+			arrayDados[linha][coluna++] = ProdutoDAO.getQtdProdutoReal(produto.getID());
+			arrayDados[linha][coluna++] = produto.getQtdMaxima();
 			arrayDados[linha][coluna++] = produto.getDataFabricacaoString();
 			arrayDados[linha][coluna++] = produto.getDataValidadeString();
-			arrayDados[linha++][coluna++] = produto.getDataCadastroString();
+			arrayDados[linha++][coluna] = produto.getDataCadastroString();
 			coluna = 0;
 		}
 		
