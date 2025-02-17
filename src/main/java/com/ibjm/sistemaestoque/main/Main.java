@@ -13,7 +13,7 @@ import com.ibjm.sistemaestoque.view.FramePrincipal;
 public class Main {
 
     public static void main(String[] args) {
-        FramePrincipal janela = new FramePrincipal();
+		FramePrincipal janela = new FramePrincipal();
 		janela.setVisible(true);
     }
 }

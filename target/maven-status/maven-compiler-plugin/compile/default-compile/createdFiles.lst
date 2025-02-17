@@ -61,6 +61,7 @@ com\ibjm\sistemaestoque\model\rn\FornecedorRN.class
 com\ibjm\sistemaestoque\view\FrameFornecedor$1.class
 com\ibjm\sistemaestoque\model\vo\NotaFiscal.class
 com\ibjm\sistemaestoque\view\FramePrincipal$10.class
+com\ibjm\sistemaestoque\view\FramePrincipal$13.class
 com\ibjm\sistemaestoque\model\dao\ConexaoDAO.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal$2.class
 com\ibjm\sistemaestoque\controller\EnderecoController.class

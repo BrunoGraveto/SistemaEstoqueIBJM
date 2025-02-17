@@ -11,7 +11,6 @@ import com.ibjm.sistemaestoque.model.dao.ProdutoDAO;
 import com.ibjm.sistemaestoque.model.vo.Cliente;
 import com.ibjm.sistemaestoque.model.vo.NotaFiscal;
 import com.ibjm.sistemaestoque.model.vo.Produto;
-import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -265,7 +264,7 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
 
         lbFormaPagamento.setText("Forma Pagamento");
 
-        comboBoxFormaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "PIX", "Débito", "Crédito" }));
+        comboBoxFormaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "PIX", "Boleto", "Débito", "Crédito" }));
 
         txtDataSaida.setEditable(false);
         txtDataSaida.setFocusable(false);

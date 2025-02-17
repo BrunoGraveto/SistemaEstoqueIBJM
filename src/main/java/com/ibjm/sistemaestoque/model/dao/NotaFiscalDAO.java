@@ -80,15 +80,19 @@ public class NotaFiscalDAO {
 	/*
 		Lista os Produtos com uma certa especificação
 	*/
-	private static String pesquisar(String categoria, String procurar) {
+	private static String pesquisar(String categoria, String procurar) throws SQLException {
 		// Altera a categoria para o determinado nome da coluna
 		switch (categoria) {
 		case "Número" -> categoria = "num_nf";
 		case "Finalizadas" -> categoria = "status_nf";
 		case "Observação" -> categoria = "observacao_nf";
+		case "Cliente" -> categoria = "id_cliente";
 		}
 		// Retorna o determinado comando sql
-		if (categoria.equals("status_nf")) {
+		if (categoria.equals("id_cliente")) {
+			ArrayList<Cliente> procurarCliente = ClienteDAO.listarClientes("Nome", procurar);
+			return "where " + categoria + " = " + procurarCliente.get(0).getID();
+		} else if (categoria.equals("status_nf")) {
 			return "where " + categoria + " = false";
 		} else if (!procurar.equals("") && !categoria.equals("")) {
 			return "where " + categoria + " like " + "'%" + procurar + "%'";
