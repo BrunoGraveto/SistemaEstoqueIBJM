@@ -12,7 +12,6 @@ com\ibjm\sistemaestoque\view\DialogConfirmar$1.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal$3.class
 com\ibjm\sistemaestoque\model\rn\NotaFiscalRN.class
 com\ibjm\sistemaestoque\controller\ProdutoController.class
-com\ibjm\sistemaestoque\model\vo\Pagamento.class
 com\ibjm\sistemaestoque\view\FramePrincipal$12.class
 com\ibjm\sistemaestoque\model\dao\EnderecoDAO.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal$1.class
@@ -38,7 +37,6 @@ com\ibjm\sistemaestoque\controller\ClienteController.class
 com\ibjm\sistemaestoque\view\FramePrincipal$7.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal$7.class
 com\ibjm\sistemaestoque\view\FramePrincipal$3.class
-com\ibjm\sistemaestoque\model\dao\PagamentoDAO.class
 com\ibjm\sistemaestoque\view\FrameProduto$4.class
 com\ibjm\sistemaestoque\view\DialogProcurar$1.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal$9.class
@@ -66,4 +64,3 @@ com\ibjm\sistemaestoque\model\dao\ConexaoDAO.class
 com\ibjm\sistemaestoque\view\FrameNotaFiscal$2.class
 com\ibjm\sistemaestoque\controller\EnderecoController.class
 com\ibjm\sistemaestoque\controller\FornecedorController.class
-com\ibjm\sistemaestoque\model\rn\PagamentoRN.class

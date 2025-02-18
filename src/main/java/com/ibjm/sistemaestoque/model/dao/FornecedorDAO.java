@@ -22,12 +22,34 @@ public class FornecedorDAO {
 	
 	// SQL
 	private static final String SQL_ADD = "insert into fornecedor (nome_fornecedor, status_fornecedor, cnpj_fornecedor, inscricao_estadual_fornecedor, cnae_fornecedor, telefone_fornecedor, email_fornecedor, data_cadastro_fornecedor) values (?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String SQL_ASSOCIACAO = "insert into fornecedor_has_endereco (id_fornecedor, id_endereco) values (?, ?)";
+	private static final String SQL_EDIT = "update fornecedor set status_fornecedor = ?, nome_fornecedor = ?, cnpj_fornecedor = ?, inscricao_estadual_fornecedor = ?, cnae_fornecedor = ?, telefone_fornecedor = ?, email_fornecedor = ?, data_cadastro_fornecedor = ? where id_fornecedor = ?";
 	private static final String SQL_LIST = "select * from fornecedor ";
 	private static final String SQL_QTD = "select count(*) from fornecedor";
 	private static final String SQL_ENCONTRAR = "select * from fornecedor where id_fornecedor = ?";
+	private static final String SQL_ASSOCIACAO = "insert into fornecedor_has_endereco (id_fornecedor, id_endereco) values (?, ?)";
 	private static final String SQL_ENCONTRAR_END = "select * from fornecedor_has_endereco where id_fornecedor = ?";
-	private static final String SQL_EDIT = "update fornecedor set status_fornecedor = ?, nome_fornecedor = ?, cnpj_fornecedor = ?, inscricao_estadual_fornecedor = ?, cnae_fornecedor = ?, telefone_fornecedor = ?, email_fornecedor = ?, data_cadastro_fornecedor = ? where id_fornecedor = ?";
+	
+	/*
+		Método que cria um Fornecedor de acordo com um ResultSet.
+	*/
+	public static Fornecedor criarFornecedor(ResultSet rs) throws SQLException {
+		try {
+			int id = rs.getInt("id_fornecedor");
+			boolean status = rs.getBoolean("status_fornecedor");
+			String nome = rs.getString("nome_fornecedor");
+			String cnpj = rs.getString("cnpj_fornecedor");
+			String inscricaoEstadual = rs.getString("inscricao_estadual_fornecedor");
+			String cnae = rs.getString("cnae_fornecedor");
+			String email = rs.getString("email_fornecedor");
+			String telefone = rs.getString("telefone_fornecedor");
+			Date dateCadastro = rs.getDate("data_cadastro_fornecedor");
+			LocalDate dataCadastro = dateCadastro.toLocalDate();
+			Endereco endereco = EnderecoDAO.encontrarEndereco(encontrarIdEndereco(id));
+			return new Fornecedor(id, status, nome, cnpj, inscricaoEstadual, cnae, endereco, telefone, email, dataCadastro);
+		} catch (SQLException e) {
+			throw e;
+		}
+	}
 	
 	/*
 		Adiciona um novo Fornecedor.
@@ -46,20 +68,6 @@ public class FornecedorDAO {
 			pstm.executeUpdate();
 		} catch (SQLException e) {
 			throw new SQLException("Não foi possivel adicionar o Fornecedor!");
-		}
-	}
-	
-	/*
-		Encontra um determinado fornecedor pelo codigo.
-	*/
-	public static void addAssociacaoEndereco(Fornecedor fornecedor) throws SQLException {
-		try (Connection conexao = ConexaoDAO.conectar();
-		PreparedStatement pstm = conexao.prepareStatement(SQL_ASSOCIACAO)) {
-			pstm.setInt(1, fornecedor.getID());
-			pstm.setInt(2, fornecedor.getEndereco().getID());
-			pstm.executeUpdate();
-		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel adicionar a associação entre o fornecedor e endereço!");
 		}
 	}
 	
@@ -85,6 +93,28 @@ public class FornecedorDAO {
 	}
 	
 	/*
+		Filtro
+	*/
+	private static String pesquisar(String categoria, String procurar) {
+		switch (categoria) {
+		case "Codigo" -> categoria = "id_fornecedor";
+		case "Nome Fantasia" -> categoria = "nome_fornecedor";
+		case "Inativos" -> categoria = "status_fornecedor";
+		case "CNPJ" -> categoria = "nome_fornecedor";
+		case "Inscrição Estadual" -> categoria = "inscricao_estadual_fornecedor";
+		case "CNAE" -> categoria = "cnae_fornecedor";
+		case "Telefone" -> categoria = "telefone_fornecedor";
+		case "Email" -> categoria = "email_fornecedor";
+		}
+		if (categoria.equals("status_fornecedor")) {
+			return "where " + categoria + " = false";
+		} else if (!procurar.equals("") && !categoria.equals("")) {
+			return "where " + categoria + " like " + "'%" + procurar + "%'";
+		}
+		return "";
+	}
+	
+	/*
 		Lista os Fornecedors existentes.
 	*/
 	public static ArrayList<Fornecedor> listarFornecedores(String categoria, String procurar) throws SQLException {
@@ -93,20 +123,8 @@ public class FornecedorDAO {
 		PreparedStatement pstm = conexao.prepareStatement(SQL_LIST+pesquisar(categoria, procurar));
 		ResultSet rs = pstm.executeQuery()) {
 			while(rs.next()) {
-				int id = rs.getInt("id_fornecedor");
-				boolean status = rs.getBoolean("status_fornecedor");
-				String nome = rs.getString("nome_fornecedor");
-				String cnpj = rs.getString("cnpj_fornecedor");
-				String inscricaoEstadual = rs.getString("inscricao_estadual_fornecedor");
-				String cnae = rs.getString("cnae_fornecedor");
-				String email = rs.getString("email_fornecedor");
-				String telefone = rs.getString("telefone_fornecedor");
-				Date dateCadastro = rs.getDate("data_cadastro_fornecedor");
-				LocalDate dataCadastro = dateCadastro.toLocalDate();
-				Endereco endereco = EnderecoDAO.encontrarEndereco(encontrarIdEndereco(id));
-				Fornecedor fornecedor = new Fornecedor(id, status, nome, cnpj, inscricaoEstadual, cnae, endereco, telefone, email, dataCadastro);
-				// Caso o fornecedor esteja inativo, não o coloca no array
-				if (pesquisar(categoria, procurar).equals("") && !status) {
+				Fornecedor fornecedor = criarFornecedor(rs);
+				if (pesquisar(categoria, procurar).equals("") && !fornecedor.getStatus()) {
 					continue;
 				}
 				arrayFornecedors.add(fornecedor);
@@ -118,76 +136,21 @@ public class FornecedorDAO {
 	}
 	
 	/*
-		Lista os Fornecedores com uma certa especificação
-	*/
-	private static String pesquisar(String categoria, String procurar) {
-		// Altera a categoria para o determinado nome da coluna
-		switch (categoria) {
-		case "Codigo" -> categoria = "id_fornecedor";
-		case "Nome Fantasia" -> categoria = "nome_fornecedor";
-		case "Inativos" -> categoria = "status_fornecedor";
-		case "CNPJ" -> categoria = "nome_fornecedor";
-		case "Inscrição Estadual" -> categoria = "inscricao_estadual_fornecedor";
-		case "CNAE" -> categoria = "cnae_fornecedor";
-		case "Telefone" -> categoria = "telefone_fornecedor";
-		case "Email" -> categoria = "email_fornecedor";
-		}
-		// Retorna o determinado comando sql
-		if (categoria.equals("status_fornecedor")) {
-			return "where " + categoria + " = false";
-		} else if (!procurar.equals("") && !categoria.equals("")) {
-			return "where " + categoria + " like " + "'%" + procurar + "%'";
-		}
-		// Caso o campo de pesquisa esteja vazio
-		return "";
-	}
-	
-	/*
-		Produra um certo endereco.
-	*/
-	public static int encontrarIdEndereco(int id) throws SQLException {
-		int idEndereco = 0;
-		try (Connection conexao = ConexaoDAO.conectar();
-		PreparedStatement pstm = conexao.prepareStatement(SQL_ENCONTRAR_END)) {
-			pstm.setInt(1, id);
-			try (ResultSet rs = pstm.executeQuery()) {
-				if (rs.next()) {
-					idEndereco = rs.getInt("id_endereco");
-				}
-			}
-		} catch (SQLException e) {
-			throw new SQLException("Não foi possivel encontrar o id de endereço!");
-		}
-		return idEndereco;
-	}
-	
-	/*
-		Encontra um determinado fornecedor pelo codigo.
+		Encontra um determinado Fornecedor pelo ID.
 	*/
 	public static Fornecedor encontrarFornecedor(int id) throws SQLException {
-		Fornecedor fornecedor = null;
 		try (Connection conexao = ConexaoDAO.conectar();
 		PreparedStatement pstm = conexao.prepareStatement(SQL_ENCONTRAR)) {
 			pstm.setInt(1, id);
 			try (ResultSet rs = pstm.executeQuery()) {
 				if (rs.next()) {
-					boolean status = rs.getBoolean("status_fornecedor");
-					String nome = rs.getString("nome_fornecedor");
-					String cnpj = rs.getString("cnpj_fornecedor");
-					String inscricaoEstadual = rs.getString("inscricao_estadual_fornecedor");
-					String cnae = rs.getString("cnae_fornecedor");
-					String email = rs.getString("email_fornecedor");
-					String telefone = rs.getString("telefone_fornecedor");
-					Date dateCadastro = rs.getDate("data_cadastro_fornecedor");
-					LocalDate dataCadastro = dateCadastro.toLocalDate();
-					Endereco endereco = EnderecoDAO.encontrarEndereco(encontrarIdEndereco(id));
-					fornecedor = new Fornecedor(id, status, nome, cnpj, inscricaoEstadual, cnae, endereco, telefone, email, dataCadastro);
+					return criarFornecedor(rs);
 				}
 			}
 		} catch (SQLException e) {
 			throw new SQLException("Não foi possivel encontrar o fornecedor!");
 		}
-		return fornecedor;
+		return null;
 	}
 	
 	/*
@@ -207,5 +170,37 @@ public class FornecedorDAO {
 		return qtd;
 	}
 	
+	/*
+		Adiciona a associação entre o Fornecedor e o Endereço
+	*/
+	public static void addAssociacaoEndereco(Fornecedor fornecedor) throws SQLException {
+		try (Connection conexao = ConexaoDAO.conectar();
+		PreparedStatement pstm = conexao.prepareStatement(SQL_ASSOCIACAO)) {
+			pstm.setInt(1, fornecedor.getID());
+			pstm.setInt(2, fornecedor.getEndereco().getID());
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			throw new SQLException("Não foi possivel adicionar a associação entre o fornecedor e endereço!");
+		}
+	}
+	
+	/*
+		Procura um Endereço pelo ID do Cliente.
+	*/
+	public static int encontrarIdEndereco(int id) throws SQLException {
+		int idEndereco = 0;
+		try (Connection conexao = ConexaoDAO.conectar();
+		PreparedStatement pstm = conexao.prepareStatement(SQL_ENCONTRAR_END)) {
+			pstm.setInt(1, id);
+			try (ResultSet rs = pstm.executeQuery()) {
+				if (rs.next()) {
+					idEndereco = rs.getInt("id_endereco");
+				}
+			}
+		} catch (SQLException e) {
+			throw new SQLException("Não foi possivel encontrar o id de endereço!");
+		}
+		return idEndereco;
+	}
 	
 }

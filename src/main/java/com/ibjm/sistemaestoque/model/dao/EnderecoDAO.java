@@ -60,7 +60,7 @@ public class EnderecoDAO {
 	}
 	
 	/*
-		Encontra um registro.
+		Encontra um Endereço pelo ID.
 	*/
 	public static Endereco encontrarEndereco(int id) throws SQLException {
 		Endereco endereco = null;
@@ -96,7 +96,7 @@ public class EnderecoDAO {
 	}
 	
 	/*
-		Retorna o ultimo registro da tabela.
+		Retorna o ultimo Endereço.
 	*/
 	public static Endereco getUltimoRegistro() throws SQLException {
 		Endereco endereco = null;

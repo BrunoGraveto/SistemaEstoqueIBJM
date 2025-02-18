@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class NotaFiscal {
 	
 	private int id;
-	private boolean status;
+	private String status;
 	private String observacao;
 	private Cliente cliente;
 	private ArrayList<Produto> produtos;
@@ -24,7 +24,7 @@ public class NotaFiscal {
 	LocalDate dataCadastro;
 	LocalDate dataSaida;
 
-	public NotaFiscal(int id, boolean status, String observacao, Cliente cliente, ArrayList<Produto> produtos, double valorTotal, String formaPagamento, LocalDate dataCadastro, LocalDate dataSaida) {
+	public NotaFiscal(int id, String status, String observacao, Cliente cliente, ArrayList<Produto> produtos, double valorTotal, String formaPagamento, LocalDate dataCadastro, LocalDate dataSaida) {
 		this.id = id;
 		this.status = status;
 		this.observacao = observacao;
@@ -34,6 +34,13 @@ public class NotaFiscal {
 		this.formaPagamento = formaPagamento;
 		this.dataCadastro = dataCadastro;
 		this.dataSaida = dataSaida;
+	}
+	
+	public boolean getStatusBoolean() {
+		if (status.equals("Inativo")) {
+			return false;
+		}
+		return true;
 	}
 	
 	public String getValorTotalString() {
@@ -48,14 +55,6 @@ public class NotaFiscal {
 		return dataSaida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 	
-	public String getAtividade() {
-		if (status) {
-			return "Ativo";
-		} else {
-			return "Inativo";
-		}
-	}
-	
 	public int getID() {
 		return id;
 	}
@@ -64,11 +63,11 @@ public class NotaFiscal {
 		this.id = id;
 	}
 
-	public boolean getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

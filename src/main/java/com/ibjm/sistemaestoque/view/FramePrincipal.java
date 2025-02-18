@@ -16,11 +16,9 @@ import com.ibjm.sistemaestoque.model.vo.Cliente;
 import com.ibjm.sistemaestoque.model.vo.Fornecedor;
 import com.ibjm.sistemaestoque.model.vo.NotaFiscal;
 import com.ibjm.sistemaestoque.model.vo.Produto;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -384,7 +382,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFornecedoresActionPerformed
 
     private void btnNotasFiscaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotasFiscaisActionPerformed
-		comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Número", "Observação", "Cliente", "Finalizadas"}));
+		comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Número", "Observação", "Cliente", "Finalizadas", "Inativos"}));
 		txtBuscar.setText("");
 		btnProdutos.setEnabled(true);
 		btnClientes.setEnabled(true);
@@ -422,7 +420,13 @@ public class FramePrincipal extends javax.swing.JFrame {
                         FornecedorController.setStatusFornecedor(FornecedorDAO.encontrarFornecedor(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())), status);
                     }
                     case "NotasFiscais" -> {
-						NotaFiscalController.setStatusNotaFiscal(NotaFiscalDAO.encontrarNotaFiscal(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())), status);
+						String statusNotaFiscal = "";
+						if (status) {
+							statusNotaFiscal = "Ativo";
+						} else {
+							statusNotaFiscal = "Inativo";
+						}
+						NotaFiscalController.setStatusNotaFiscal(NotaFiscalDAO.encontrarNotaFiscal(Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())), statusNotaFiscal);
                     }
                 }
             }

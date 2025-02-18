@@ -33,6 +33,7 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
 	ArrayList<Integer> arrayQtdProdutos;
 	ArrayList<Produto> arrayProdutos;
 	double valorTotal;
+	String statusNota;
 	
 	/**
 	 * Creates new form FrameNotaFiscal
@@ -48,7 +49,7 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
 		arrayProdutos = new ArrayList<>();
 		initComponents();
 		preencher();
-		setLocationRelativeTo(fp);
+		setLocationRelativeTo(fp);             
 	}
 
 	/**
@@ -442,7 +443,7 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
         // Atualiza o estoque
 		loadNotaFiscal();
 		try {
-			NotaFiscalController.setStatusNotaFiscal(notaFiscal, false);
+			NotaFiscalController.setStatusNotaFiscal(notaFiscal, "Finalizado");
 			JOptionPane.showMessageDialog(this, "Nota Fiscal finalizada com sucesso!");
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Problema ao fechar Nota Fiscal: " + e);
@@ -458,11 +459,13 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
 				txtNum.setText(String.format("%04d", NotaFiscalDAO.getCountNotasFiscais()+1)+"");
 				txtDataCadastro.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				txtDataSaida.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+				statusNota = "Ativo";
 			} 
 			// Caso esteja editando um NotaFiscal
 			else if (modo.equals("Editar")) {
 				notaFiscal = NotaFiscalDAO.encontrarNotaFiscal(codSelecionado);
 				txtNum.setText(notaFiscal.getID()+"");
+				statusNota = notaFiscal.getStatus();
 				txtDataCadastro.setText(notaFiscal.getDataCadastroString());
 				txtCliente.setText(notaFiscal.getCliente().getNome());
 				txtObservacao.setText(notaFiscal.getObservacao());
@@ -476,6 +479,9 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
 				txtDataCadastro.setText(notaFiscal.getDataCadastroString());
 				txtDataSaida.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				cliente = notaFiscal.getCliente();
+				if (statusNota.equals("Inativo")) {
+					btnFecharNotaFiscal.setEnabled(false);
+				}
 			}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(this, e);
@@ -528,12 +534,11 @@ public class FrameNotaFiscal extends javax.swing.JFrame {
 	*/
 	public void loadNotaFiscal() {
 		int num = Integer.parseInt(txtNum.getText());
-		boolean status = true;
 		String observacao = txtObservacao.getText();
 		String formaPagamento = comboBoxFormaPagamento.getSelectedItem().toString();
 		LocalDate dataCadastro = LocalDate.parse(txtDataCadastro.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		LocalDate dataSaida = LocalDate.parse(txtDataSaida.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		notaFiscal = new NotaFiscal(num, status, observacao, cliente, arrayProdutos, valorTotal, formaPagamento, dataCadastro, dataSaida);
+		notaFiscal = new NotaFiscal(num, statusNota, observacao, cliente, arrayProdutos, valorTotal, formaPagamento, dataCadastro, dataSaida);
 	}
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -31,7 +31,7 @@ public class NotaFiscalController {
 		// Passa pelo array list os colocando no array de objetos
 		for (NotaFiscal notaFiscal : arrayNotasFiscais) {
 			arrayDados[linha][coluna++] = String.format("%04d", notaFiscal.getID());
-			arrayDados[linha][coluna++] = notaFiscal.getAtividade();
+			arrayDados[linha][coluna++] = notaFiscal.getStatus();
 			arrayDados[linha][coluna++] = notaFiscal.getCliente().getNome();
 			arrayDados[linha][coluna++] = notaFiscal.getObservacao();
 			arrayDados[linha][coluna++] = notaFiscal.getValorTotalString();
@@ -88,9 +88,12 @@ public class NotaFiscalController {
 	/*
 		"Remover" um cliente.
 	*/
-	public static void setStatusNotaFiscal(NotaFiscal notaFiscal, boolean status) throws Exception {
+	public static void setStatusNotaFiscal(NotaFiscal notaFiscal, String status) throws Exception {
 		notaFiscal.setStatus(status);
 		NotaFiscalDAO.editarNotaFiscal(notaFiscal);
+		for (Produto produto : notaFiscal.getProdutos()) {
+			NotaFiscalDAO.updateStatusProdutoNotaFiscal(notaFiscal.getID(), produto.getID(), notaFiscal.getStatusBoolean());
+		}
 	}
 	
 }
