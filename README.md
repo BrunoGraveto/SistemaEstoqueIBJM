@@ -1,4 +1,4 @@
-## Sistema Estoque IBJM ##
+# Sistema Estoque IBJM #
 Um projeto desenvolvido como Trabalho Final para a matéria POO.
 
 # Codigo SQL #
